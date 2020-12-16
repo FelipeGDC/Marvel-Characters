@@ -52,7 +52,7 @@ Or just replace and put your own API keys accordingly.
 
 ## Screenshots
 
-![list_characters](https://github.com/FelipeGDC/Marvel-Characters/blob/master/images/characters-list.png?raw=true)
-![character_detail](https://github.com/FelipeGDC/Marvel-Characters/blob/master/images/character-detail.png?raw=true)
+![list_characters](https://github.com/FelipeGDC/Marvel-Characters/blob/master/images/characters-list.png)
+![character_detail](https://github.com/FelipeGDC/Marvel-Characters/blob/master/images/character-detail.png)
 
 
