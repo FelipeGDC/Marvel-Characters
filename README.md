@@ -50,4 +50,9 @@ The API keys should be in an apikey.properties file in the root folder and will 
 
 Or just replace and put your own API keys accordingly.
 
-##Screenshots
+## Screenshots
+
+![list_characters](https://github.com/FelipeGDC/Marvel-Characters/blob/master/images/characters-list.png?raw=true)
+![character_detail](https://github.com/FelipeGDC/Marvel-Characters/blob/master/images/character-detail.png?raw=true)
+
+
