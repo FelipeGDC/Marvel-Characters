@@ -15,7 +15,6 @@ import com.fgdc.marvelcharacters.databinding.ItemComicBinding
 import com.fgdc.marvelcharacters.ui.characterDetail.models.ComicListView
 import com.fgdc.marvelcharacters.utils.extensions.simpleLoad
 
-
 class ComicsListAdapter :
     ListAdapter<ComicListView, ComicsListAdapter.ComicsViewHolder>(DIFF_CALLBACK) {
 
@@ -24,14 +23,12 @@ class ComicsListAdapter :
         return ComicsViewHolder(binding)
     }
 
-
     override fun onBindViewHolder(holder: ComicsListAdapter.ComicsViewHolder, position: Int) {
         val comicItem = getItem(position)
         if (comicItem != null) {
             holder.bind(comicItem)
         }
     }
-
 
     inner class ComicsViewHolder(private val itemBinding: ItemComicBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {

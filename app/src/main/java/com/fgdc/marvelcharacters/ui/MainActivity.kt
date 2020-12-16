@@ -15,7 +15,6 @@ class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -38,8 +37,6 @@ class MainActivity : BaseActivity() {
                 R.id.charactersList -> View.VISIBLE
                 else -> View.GONE
             }
-
-
         }
         binding.toolbar.setNavigationOnClickListener { onBackPressed() }
     }
@@ -47,5 +44,4 @@ class MainActivity : BaseActivity() {
     fun showProgressStatus(viewStatus: Int) {
         binding.progress.visibility = viewStatus
     }
-
 }

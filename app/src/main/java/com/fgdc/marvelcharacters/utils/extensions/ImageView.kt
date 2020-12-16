@@ -21,7 +21,6 @@ fun ImageView.circleListLoad(url: String, context: Context) {
     }
 }
 
-
 fun ImageView.simpleLoad(url: String, context: Context) {
     this.load(
         url,
@@ -29,5 +28,4 @@ fun ImageView.simpleLoad(url: String, context: Context) {
             add(SvgDecoder(context))
         }.build()
     )
-
 }

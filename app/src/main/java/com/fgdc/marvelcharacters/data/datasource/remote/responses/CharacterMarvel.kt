@@ -1,6 +1,5 @@
 package com.fgdc.marvelcharacters.data.datasource.remote.responses
 
-
 import com.fgdc.marvelcharacters.domain.model.CharacterDetailDomain
 import com.fgdc.marvelcharacters.domain.model.CharacterListDomain
 import com.squareup.moshi.Json
@@ -52,10 +51,9 @@ data class CharacterMarvel(
                 } else {
                     0
                 }
-            })
-
+            }
+        )
 }
-
 
 @JsonClass(generateAdapter = true)
 data class Comics(
@@ -77,7 +75,6 @@ data class ComicsItem(
     val resourceURI: String
 )
 
-
 @JsonClass(generateAdapter = true)
 data class Events(
     @Json(name = "available")
@@ -98,7 +95,6 @@ data class EventsItem(
     val resourceURI: String
 )
 
-
 @JsonClass(generateAdapter = true)
 data class Series(
     @Json(name = "available")
@@ -118,7 +114,6 @@ data class SeriesItem(
     @Json(name = "resourceURI")
     val resourceURI: String
 )
-
 
 @JsonClass(generateAdapter = true)
 data class Stories(
@@ -149,7 +144,6 @@ data class Thumbnail(
     @Json(name = "path")
     val path: String
 )
-
 
 @JsonClass(generateAdapter = true)
 data class Url(

@@ -23,7 +23,6 @@ class NetworkModule {
     @Provides
     fun provideSeriesService(retrofit: Retrofit): SeriesApi = SeriesService(retrofit)
 
-
     @Singleton
     @Provides
     fun provideOkHttpClient(): OkHttpClient {
@@ -63,5 +62,4 @@ class NetworkModule {
 
     @Provides
     fun providesNetworkHandler(context: Context): NetworkHandler = NetworkHandler(context)
-
 }

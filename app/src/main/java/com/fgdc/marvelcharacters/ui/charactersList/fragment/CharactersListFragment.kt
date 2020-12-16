@@ -16,7 +16,6 @@ import com.fgdc.marvelcharacters.utils.extensions.failure
 import com.fgdc.marvelcharacters.utils.extensions.observe
 import javax.inject.Inject
 
-
 class CharactersListFragment : BaseFragment() {
 
     @Inject
@@ -60,7 +59,6 @@ class CharactersListFragment : BaseFragment() {
         binding.emptyView.visibility = View.GONE
         binding.rvCharacters.visibility = View.VISIBLE
         adapter.submitList(characters ?: emptyList())
-
     }
 
     private fun addMoreCharacters(characters: List<CharacterListView>?) {
@@ -80,5 +78,4 @@ class CharactersListFragment : BaseFragment() {
             }
         }
     }
-
 }

@@ -20,7 +20,6 @@ class CharactersListAdapter :
         return CharactersViewHolder(binding)
     }
 
-
     override fun onBindViewHolder(
         holder: CharactersListAdapter.CharactersViewHolder,
         position: Int
@@ -30,7 +29,6 @@ class CharactersListAdapter :
             holder.bind(characterItem)
         }
     }
-
 
     inner class CharactersViewHolder(private val itemBinding: ItemCharacterBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {

@@ -33,7 +33,6 @@ class CharacterDetailFragment : BaseFragment() {
     private val comicsAdapter = ComicsListAdapter()
     private val seriesAdapter = SeriesListAdapter()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         with(characterDetailViewModel) {
@@ -70,7 +69,6 @@ class CharacterDetailFragment : BaseFragment() {
             } else {
                 binding.characterDescription.visibility = View.GONE
                 binding.characterDescriptionLabel.visibility = View.GONE
-
             }
         }
     }
@@ -108,7 +106,6 @@ class CharacterDetailFragment : BaseFragment() {
             setTitle(getString(R.string.common_error))
             btnAccept {
                 findNavController().navigateUp()
-
             }
         }.show()
     }

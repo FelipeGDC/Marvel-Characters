@@ -14,5 +14,4 @@ interface ComicsApi {
 
     @GET(COMICS_ENDPOINT.plus("/{comic_id}"))
     suspend fun getComicById(@Path("comic_id") comicId: Int): Response<ApiResponse<ComicMarvel>>
-
 }

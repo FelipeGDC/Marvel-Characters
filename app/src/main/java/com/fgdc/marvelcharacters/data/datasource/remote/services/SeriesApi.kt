@@ -14,5 +14,4 @@ interface SeriesApi {
 
     @GET(SERIES_ENDPOINT.plus("/{series_id}"))
     suspend fun getSeriesById(@Path("series_id") seriesId: Int): Response<ApiResponse<SeriesMarvel>>
-
 }

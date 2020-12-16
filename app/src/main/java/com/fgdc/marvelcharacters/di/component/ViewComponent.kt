@@ -20,5 +20,4 @@ interface ViewComponent {
     fun inject(charactersListFragment: CharactersListFragment)
 
     fun inject(characterDetailFragment: CharacterDetailFragment)
-
 }

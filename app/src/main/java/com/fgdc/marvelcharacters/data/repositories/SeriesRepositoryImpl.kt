@@ -37,5 +37,4 @@ class SeriesRepositoryImpl @Inject constructor(
         it.printStackTrace()
         emit(Error(Throwable("s")))
     }.flowOn(Dispatchers.IO)
-
 }

@@ -1,15 +1,12 @@
 package com.fgdc.marvelcharacters.data.repositories
 
 import com.fgdc.marvelcharacters.data.datasource.remote.services.CharactersApi
-import com.fgdc.marvelcharacters.domain.model.CharacterListDomain
 import com.fgdc.marvelcharacters.utils.exception.ErrorHandler.NETWORK_ERROR_MESSAGE
 import com.fgdc.marvelcharacters.utils.functional.Error
 import com.fgdc.marvelcharacters.utils.functional.ErrorNoConnection
-import com.fgdc.marvelcharacters.utils.functional.State
 import com.fgdc.marvelcharacters.utils.functional.Success
 import com.fgdc.marvelcharacters.utils.helpers.NetworkHandler
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -38,10 +35,6 @@ class CharactersRepositoryImpl @Inject constructor(
         emit(Error(Throwable("s")))
     }.flowOn(Dispatchers.IO)
 
-    override fun getCharacterByName(name: String): Flow<State<List<CharacterListDomain>>> {
-        TODO("Not yet implemented")
-    }
-
     override fun getCharacterById(id: Int) = flow {
         emit(
             if (networkHandler.isConnected == true) {
@@ -60,5 +53,4 @@ class CharactersRepositoryImpl @Inject constructor(
         it.printStackTrace()
         emit(Error(Throwable("s")))
     }.flowOn(Dispatchers.IO)
-
 }

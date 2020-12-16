@@ -1,6 +1,5 @@
 package com.fgdc.marvelcharacters.data.datasource.remote.responses
 
-
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 

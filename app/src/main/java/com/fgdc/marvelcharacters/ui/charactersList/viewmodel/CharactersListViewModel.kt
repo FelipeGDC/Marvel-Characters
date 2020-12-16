@@ -30,7 +30,6 @@ class CharactersListViewModel @Inject constructor(val getAllCharacters: GetAllCh
     var charactersResponse = MutableLiveData<List<CharacterListView>>()
     var moreCharactersResponse = MutableLiveData<List<CharacterListView>>()
 
-
     fun getAllCharacters() {
         viewModelScope.launch {
             getAllCharacters(GetAllCharacters.Params(lastPageCount))
@@ -51,7 +50,6 @@ class CharactersListViewModel @Inject constructor(val getAllCharacters: GetAllCh
                 }
         }
     }
-
 
     fun charactersListScrolled() {
         lastPageCount += MAX_OFFSET

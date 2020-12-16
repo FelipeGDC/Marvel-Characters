@@ -41,7 +41,6 @@ data class Price(
     val type: String
 )
 
-
 @JsonClass(generateAdapter = true)
 data class ThumbnailComic(
     @Json(name = "extension")

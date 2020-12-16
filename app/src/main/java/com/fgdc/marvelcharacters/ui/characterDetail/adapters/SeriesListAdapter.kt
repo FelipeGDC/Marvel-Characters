@@ -21,14 +21,12 @@ class SeriesListAdapter :
         return SeriesViewHolder(binding)
     }
 
-
     override fun onBindViewHolder(holder: SeriesListAdapter.SeriesViewHolder, position: Int) {
         val seriesItem = getItem(position)
         if (seriesItem != null) {
             holder.bind(seriesItem)
         }
     }
-
 
     inner class SeriesViewHolder(private val itemBinding: ItemSeriesBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {

@@ -89,7 +89,6 @@ class CharacterDetailViewModel @Inject constructor(
         }
     }
 
-
     private fun getSeriesById(seriesId: Int) {
         viewModelScope.launch {
             getSeries(GetSeriesById.Params(seriesId))

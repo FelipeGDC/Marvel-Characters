@@ -37,5 +37,4 @@ class ComicsRepositoryImpl @Inject constructor(
         it.printStackTrace()
         emit(Error(Throwable("s")))
     }.flowOn(Dispatchers.IO)
-
 }

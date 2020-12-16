@@ -7,5 +7,4 @@ import kotlinx.coroutines.flow.Flow
 interface SeriesRepository {
 
     fun getSeriesById(id: Int): Flow<State<List<SeriesListDomain>>>
-
 }

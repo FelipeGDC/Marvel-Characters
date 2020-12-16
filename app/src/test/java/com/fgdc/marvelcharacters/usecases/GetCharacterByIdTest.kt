@@ -3,8 +3,6 @@ package com.fgdc.marvelcharacters.usecases
 import com.fgdc.marvelcharacters.data.datasource.remote.services.CharactersService
 import com.fgdc.marvelcharacters.data.repositories.CharactersRepositoryImpl
 import com.fgdc.marvelcharacters.domain.model.CharacterDetailDomain
-import com.fgdc.marvelcharacters.domain.model.CharacterListDomain
-import com.fgdc.marvelcharacters.domain.usecases.GetAllCharacters
 import com.fgdc.marvelcharacters.domain.usecases.GetCharacterById
 import com.fgdc.marvelcharacters.helpers.mockApiResponse
 import com.fgdc.marvelcharacters.helpers.mockCharacters
