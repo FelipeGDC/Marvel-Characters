@@ -1,0 +1,13 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="text_style_medium">15sp</dimen>
+    <dimen name="text_style_big">25sp</dimen>
+    <dimen name="line_height_button_primary">20sp</dimen>
+    <dimen name="margin_default">16dp</dimen>
+
+    <!-- list of characters -->
+    <dimen name="margin_search_bar">20dp</dimen>
+
+</resources>

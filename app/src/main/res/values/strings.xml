@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Marvel Characters</string>
+
+    <!-- Lottie files-->
+    <string name="lottie_loader">loader-deadpool.json</string>
+
+    <!-- Error messages -->
+    <string name="common_error">An error has occurred\nPlease try again</string>
+    <string name="try_again">Try again</string>
+
+    <!-- Dialogs -->
+    <string name="accept_btn">Accept</string>
+
+    <!-- Detail fragment -->
+    <string name="character_info">Information</string>
+    <string name="character_description">Description</string>
+    <string name="character_comics">Comics</string>
+    <string name="character_series">Series</string>
+    <string name="character_events">Events</string>
+    <string name="comic_price">$%.2f</string>
+
+
+</resources>
