@@ -12,6 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="ToolBarStyle" parent="Theme.AppCompat">
@@ -19,11 +20,6 @@
         <item name="android:textColorSecondary">@color/marvel_red</item>
         <item name="actionMenuTextColor">@android:color/white</item>
         <item name="iconTint">@color/white</item>
-        <!--<item name="drawerArrowStyle">@style/DrawerArrowStyle</item>-->
-        <item name="android:shadowColor">@android:color/black</item>
-        <item name="android:shadowDx">0</item>
-        <item name="android:shadowDy">0</item>
-        <item name="android:shadowRadius">25</item>
     </style>
 
     <style name="Toolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
@@ -63,14 +59,5 @@
         <item name="android:textAppearance">?android:textAppearanceMedium</item>
     </style>
 
-
-    <style name="ShadowTextStyle" parent="@android:style/TextAppearance">
-        <item name="android:textSize">35sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:layout_marginLeft">40dp</item>
-        <item name="android:layout_marginBottom">10dp</item>
-
-    </style>
 
 </resources>
