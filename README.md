@@ -44,7 +44,7 @@ You'll need to create your own API keys on [Marvel's developer site](https://dev
 
 The API keys should be in the apikey.properties file in the root folder, you'll need to add the values accordingly.
 
-        MARVEL_API_BASE_URL="https://gateway.marvel.com"
+        MARVEL_API_BASE_URL="hthttps://gateway.marvel.com/v1/public/"
         MARVEL_API_PUBLIC_KEY="your public api"
         MARVEL_API_TS="MarvelApp"
         MARVEL_API_HASH="your md5(ts+privateKey+publicKey) hash"
