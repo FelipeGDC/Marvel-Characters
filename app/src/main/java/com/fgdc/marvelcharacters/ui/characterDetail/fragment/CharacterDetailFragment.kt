@@ -64,12 +64,19 @@ class CharacterDetailFragment : BaseFragment() {
     private fun setCharacterDetail(characterDetailView: CharacterDetailView?) {
         characterDetailView?.let {
             binding.characterImage.simpleLoad(characterDetailView.image, requireContext())
-            binding.toolbarCharacter.title = characterDetailView.name
+            binding.toolbarTitle.text = characterDetailView.name
+            binding.title.text = characterDetailView.name
             if (characterDetailView.description.isNotEmpty()) {
                 binding.characterDescription.text = characterDetailView.description
             } else {
                 binding.characterDescription.visibility = View.GONE
                 binding.characterDescriptionLabel.visibility = View.GONE
+            }
+            binding.backButton.setOnClickListener{
+                findNavController().navigateUp()
+            }
+            binding.backButtonSecondary.setOnClickListener{
+                findNavController().navigateUp()
             }
         }
     }
