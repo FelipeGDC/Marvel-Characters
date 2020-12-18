@@ -15,7 +15,7 @@ class InfoAlertDialog(context: Context) : BaseAlertDialog() {
         AlertDialog.Builder(context).setView(binding.root)
 
     fun setTitle(text: String) {
-        with(binding.tvAlertInfoMessage) {
+        with(binding.tvAlertInfoTitle) {
             this.text = text
         }
     }

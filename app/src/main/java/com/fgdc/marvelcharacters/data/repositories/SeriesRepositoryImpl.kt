@@ -3,10 +3,7 @@ package com.fgdc.marvelcharacters.data.repositories
 import com.fgdc.marvelcharacters.data.datasource.remote.services.SeriesApi
 import com.fgdc.marvelcharacters.domain.model.SeriesListDomain
 import com.fgdc.marvelcharacters.utils.exception.ErrorHandler
-import com.fgdc.marvelcharacters.utils.functional.Error
-import com.fgdc.marvelcharacters.utils.functional.ErrorNoConnection
-import com.fgdc.marvelcharacters.utils.functional.State
-import com.fgdc.marvelcharacters.utils.functional.Success
+import com.fgdc.marvelcharacters.utils.functional.*
 import com.fgdc.marvelcharacters.utils.helpers.NetworkHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -26,7 +23,7 @@ class SeriesRepositoryImpl @Inject constructor(
                     if (isSuccessful && body() != null) {
                         Success(body()!!.apiData.results.map { it.toSeriesListDomain() })
                     } else {
-                        Error(Throwable("s"))
+                        BadRequest(Throwable(ErrorHandler.BAD_REQUEST))
                     }
                 }
             } else {
@@ -35,6 +32,6 @@ class SeriesRepositoryImpl @Inject constructor(
         )
     }.catch {
         it.printStackTrace()
-        emit(Error(Throwable("s")))
+        emit(Error(Throwable(ErrorHandler.UNKNOWN_ERROR)))
     }.flowOn(Dispatchers.IO)
 }

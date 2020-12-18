@@ -13,6 +13,10 @@ abstract class BaseViewModel : ViewModel() {
         this.failure.value = failure
     }
 
+    protected fun handleBadRequest(failure: Throwable?) {
+        this.badRequest.value = failure
+    }
+
     protected fun handleShowSpinner(show: Boolean) {
         this.showSpinner.value = show
     }

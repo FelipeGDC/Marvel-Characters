@@ -36,8 +36,9 @@ class CharacterDetailFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         with(characterDetailViewModel) {
-            observe(showSpinner, ::handleShowSpinner)
+            observe(showSpinner, ::showSpinner)
             failure(failure, ::handleFailure)
+            failure(badRequest, ::handleBadRequest)
             observe(characterDetailResponse, ::setCharacterDetail)
             observe(comicsListResponse, ::setComicsCarousel)
             observe(seriesListResponse, ::setSeriesCarousel)
@@ -97,13 +98,20 @@ class CharacterDetailFragment : BaseFragment() {
         }
     }
 
-    private fun handleShowSpinner(show: Boolean?) {
-        showSpinner(show ?: false)
-    }
-
     private fun handleFailure(failure: Throwable?) {
         showInfoAlertDialog {
-            setTitle(getString(R.string.common_error))
+            setTitle(getString(R.string.error_title))
+            setText(failure?.message ?: getString(R.string.common_error))
+            btnAccept {
+                findNavController().navigateUp()
+            }
+        }.show()
+    }
+
+    private fun handleBadRequest(failure: Throwable?) {
+        showInfoAlertDialog {
+            setTitle(getString(R.string.bad_request))
+            setText(failure?.message ?: getString(R.string.common_error))
             btnAccept {
                 findNavController().navigateUp()
             }

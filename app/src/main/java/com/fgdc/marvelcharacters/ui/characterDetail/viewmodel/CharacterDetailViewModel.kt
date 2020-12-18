@@ -12,7 +12,9 @@ import com.fgdc.marvelcharacters.ui.base.BaseViewModel
 import com.fgdc.marvelcharacters.ui.characterDetail.models.CharacterDetailView
 import com.fgdc.marvelcharacters.ui.characterDetail.models.ComicListView
 import com.fgdc.marvelcharacters.ui.characterDetail.models.SeriesListView
+import com.fgdc.marvelcharacters.utils.functional.BadRequest
 import com.fgdc.marvelcharacters.utils.functional.Error
+import com.fgdc.marvelcharacters.utils.functional.ErrorNoConnection
 import com.fgdc.marvelcharacters.utils.functional.Success
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
@@ -25,8 +27,7 @@ class CharacterDetailViewModel @Inject constructor(
     private val getCharacter: GetCharacterById,
     private val getComic: GetComicById,
     private val getSeries: GetSeriesById
-) :
-    BaseViewModel() {
+) : BaseViewModel() {
 
     lateinit var characterDetail: CharacterDetailView
     var characterDetailResponse = MutableLiveData<CharacterDetailView>()
@@ -43,12 +44,10 @@ class CharacterDetailViewModel @Inject constructor(
                 .catch { failure -> handleFailure(failure) }
                 .collect { result ->
                     when (result) {
-                        is Success<List<CharacterDetailDomain>> -> {
-                            handleSuccessGetCharacter(result.data)
-                        }
-                        is Error -> {
-                            failure.value = result.exception
-                        }
+                        is Success<List<CharacterDetailDomain>> -> handleSuccessGetCharacter(result.data)
+                        is Error -> handleFailure(result.exception)
+                        is ErrorNoConnection -> handleFailure(result.exception)
+                        is BadRequest -> handleBadRequest(result.exception)
                     }
                 }
         }
@@ -81,9 +80,9 @@ class CharacterDetailViewModel @Inject constructor(
                             comicLists.addAll(result.data.map { it.toComicListView() })
                             comicsListResponse.postValue(comicLists)
                         }
-                        is Error -> {
-                            failure.value = result.exception
-                        }
+                        is Error -> handleFailure(result.exception)
+                        is ErrorNoConnection -> handleFailure(result.exception)
+                        is BadRequest -> handleBadRequest(result.exception)
                     }
                 }
         }
@@ -101,9 +100,9 @@ class CharacterDetailViewModel @Inject constructor(
                             seriesLists.addAll(result.data.map { it.toSeriesListView() })
                             seriesListResponse.postValue(seriesLists)
                         }
-                        is Error -> {
-                            failure.value = result.exception
-                        }
+                        is Error -> handleFailure(result.exception)
+                        is ErrorNoConnection -> handleFailure(result.exception)
+                        is BadRequest -> handleBadRequest(result.exception)
                     }
                 }
         }

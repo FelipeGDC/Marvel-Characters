@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.fgdc.marvelcharacters.R
 import com.fgdc.marvelcharacters.databinding.FragmentCharactersListBinding
 import com.fgdc.marvelcharacters.di.component.ViewComponent
 import com.fgdc.marvelcharacters.ui.base.BaseFragment
@@ -29,8 +30,9 @@ class CharactersListFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         with(charactersListViewModel) {
-            observe(showSpinner, ::handleShowSpinner)
+            observe(showSpinner, ::showSpinner)
             failure(failure, ::handleFailure)
+            failure(badRequest, ::handleBadRequest)
             observe(charactersResponse, ::setListOfCharacters)
             observe(moreCharactersResponse, ::addMoreCharacters)
         }
@@ -65,17 +67,24 @@ class CharactersListFragment : BaseFragment() {
         adapter.submitList(characters ?: emptyList())
     }
 
-    private fun handleShowSpinner(show: Boolean?) {
-        showSpinner(show ?: false)
-    }
-
     private fun handleFailure(failure: Throwable?) {
         if (failure?.message == ErrorHandler.NETWORK_ERROR_MESSAGE) {
             binding.rvCharacters.visibility = View.GONE
             binding.emptyView.visibility = View.VISIBLE
+            binding.errorMessage.text = failure.message ?: getString(R.string.common_error)
             binding.tryAgainBtn.setOnClickListener {
                 charactersListViewModel.getAllCharacters()
             }
+        }
+    }
+
+    private fun handleBadRequest(failure: Throwable?) {
+        binding.rvCharacters.visibility = View.GONE
+        binding.emptyView.visibility = View.VISIBLE
+        binding.errorMessage.text = failure?.message ?: getString(R.string.common_error)
+
+        binding.tryAgainBtn.setOnClickListener {
+            charactersListViewModel.getAllCharacters()
         }
     }
 }
