@@ -9,7 +9,7 @@ import retrofit2.http.Query
 
 interface CharactersApi {
     companion object {
-        private const val CHARACTERS_ENDPOINT = "v1/public/characters"
+        private const val CHARACTERS_ENDPOINT = "characters"
     }
 
     @GET(CHARACTERS_ENDPOINT)

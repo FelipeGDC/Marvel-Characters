@@ -5,6 +5,9 @@
     <string name="lottie_loader">loader-deadpool.json</string>
 
     <!-- Error messages -->
+    <string name="bad_request">Bad request</string>
+    <string name="error_connection">Error connection</string>
+    <string name="error_title">Error</string>
     <string name="common_error">An error has occurred\nPlease try again</string>
     <string name="try_again">Try again</string>
 

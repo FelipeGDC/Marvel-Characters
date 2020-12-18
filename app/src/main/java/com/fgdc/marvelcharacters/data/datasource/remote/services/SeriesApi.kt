@@ -9,7 +9,7 @@ import retrofit2.http.Path
 interface SeriesApi {
 
     companion object {
-        private const val SERIES_ENDPOINT = "v1/public/series"
+        private const val SERIES_ENDPOINT = "series"
     }
 
     @GET(SERIES_ENDPOINT.plus("/{series_id}"))

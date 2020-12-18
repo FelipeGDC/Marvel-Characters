@@ -9,7 +9,7 @@ import retrofit2.http.Path
 interface ComicsApi {
 
     companion object {
-        private const val COMICS_ENDPOINT = "v1/public/comics"
+        private const val COMICS_ENDPOINT = "comics"
     }
 
     @GET(COMICS_ENDPOINT.plus("/{comic_id}"))

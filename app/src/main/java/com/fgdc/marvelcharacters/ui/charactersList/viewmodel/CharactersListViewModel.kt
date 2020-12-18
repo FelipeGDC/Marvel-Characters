@@ -6,6 +6,7 @@ import com.fgdc.marvelcharacters.domain.model.CharacterListDomain
 import com.fgdc.marvelcharacters.domain.usecases.GetAllCharacters
 import com.fgdc.marvelcharacters.ui.base.BaseViewModel
 import com.fgdc.marvelcharacters.ui.charactersList.models.CharacterListView
+import com.fgdc.marvelcharacters.utils.functional.BadRequest
 import com.fgdc.marvelcharacters.utils.functional.Error
 import com.fgdc.marvelcharacters.utils.functional.ErrorNoConnection
 import com.fgdc.marvelcharacters.utils.functional.Success
@@ -37,15 +38,12 @@ class CharactersListViewModel @Inject constructor(val getAllCharacters: GetAllCh
                 .onEach { handleShowSpinner(false) }
                 .catch { failure -> handleFailure(failure) }.collect { result ->
                     when (result) {
-                        is Success<List<CharacterListDomain>> -> {
-                            handleSuccessGetAllCharacters(result.data)
-                        }
-                        is Error -> {
-                            failure.value = result.exception
-                        }
-                        is ErrorNoConnection -> {
-                            failure.value = result.exception
-                        }
+                        is Success<List<CharacterListDomain>> -> handleSuccessGetAllCharacters(
+                            result.data
+                        )
+                        is Error -> handleFailure(result.exception)
+                        is ErrorNoConnection -> handleFailure(result.exception)
+                        is BadRequest -> handleBadRequest(result.exception)
                     }
                 }
         }
@@ -58,15 +56,12 @@ class CharactersListViewModel @Inject constructor(val getAllCharacters: GetAllCh
                 .catch { failure -> handleFailure(failure) }
                 .collect { result ->
                     when (result) {
-                        is Success<List<CharacterListDomain>> -> {
-                            handleSuccessGetMoreCharacters(result.data)
-                        }
-                        is Error -> {
-                            failure.value = result.exception
-                        }
-                        is ErrorNoConnection -> {
-                            failure.value = result.exception
-                        }
+                        is Success<List<CharacterListDomain>> -> handleSuccessGetMoreCharacters(
+                            result.data
+                        )
+                        is Error -> handleFailure(result.exception)
+                        is ErrorNoConnection -> handleFailure(result.exception)
+                        is BadRequest -> handleBadRequest(result.exception)
                     }
                 }
         }

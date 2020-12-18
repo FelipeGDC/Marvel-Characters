@@ -1,7 +1,9 @@
 package com.fgdc.marvelcharacters.data.repositories
 
 import com.fgdc.marvelcharacters.data.datasource.remote.services.CharactersApi
+import com.fgdc.marvelcharacters.utils.exception.ErrorHandler
 import com.fgdc.marvelcharacters.utils.exception.ErrorHandler.NETWORK_ERROR_MESSAGE
+import com.fgdc.marvelcharacters.utils.functional.BadRequest
 import com.fgdc.marvelcharacters.utils.functional.Error
 import com.fgdc.marvelcharacters.utils.functional.ErrorNoConnection
 import com.fgdc.marvelcharacters.utils.functional.Success
@@ -23,7 +25,7 @@ class CharactersRepositoryImpl @Inject constructor(
                     if (isSuccessful && body() != null) {
                         Success(body()!!.apiData.results.map { it.toCharacterListDomain() })
                     } else {
-                        Error(Throwable("s"))
+                        BadRequest(Throwable(ErrorHandler.BAD_REQUEST))
                     }
                 }
             } else {
@@ -32,7 +34,7 @@ class CharactersRepositoryImpl @Inject constructor(
         )
     }.catch {
         it.printStackTrace()
-        emit(Error(Throwable("s")))
+        emit(Error(Throwable(ErrorHandler.UNKNOWN_ERROR)))
     }.flowOn(Dispatchers.IO)
 
     override fun getCharacterById(id: Int) = flow {
@@ -42,7 +44,7 @@ class CharactersRepositoryImpl @Inject constructor(
                     if (isSuccessful && body() != null) {
                         Success(body()!!.apiData.results.map { it.toCharacterDetailDomain() })
                     } else {
-                        Error(Throwable("s"))
+                        BadRequest(Throwable(ErrorHandler.BAD_REQUEST))
                     }
                 }
             } else {
@@ -51,6 +53,6 @@ class CharactersRepositoryImpl @Inject constructor(
         )
     }.catch {
         it.printStackTrace()
-        emit(Error(Throwable("s")))
+        emit(Error(Throwable(ErrorHandler.UNKNOWN_ERROR)))
     }.flowOn(Dispatchers.IO)
 }

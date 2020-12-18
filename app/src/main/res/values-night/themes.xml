@@ -15,6 +15,25 @@
         <item name="android:textColor">@color/marvel_red</item>
     </style>
 
+    <style name="TextViewStyleHeader" parent="Base.Widget.AppCompat.TextView">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:background">@color/marvel_red</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingTop">15dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:textAppearance">?android:textAppearanceMedium</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="RedSeparator" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+
+
     <style name="FieldTextViewStyle" parent="Base.Widget.AppCompat.TextView">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>

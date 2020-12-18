@@ -30,6 +30,7 @@ android {
 
         buildConfigField "String", "MARVEL_API_BASE_URL", apikeyProperties["MARVEL_API_BASE_URL"]
         buildConfigField "String", "MARVEL_API_PUBLIC_KEY", apikeyProperties["MARVEL_API_PUBLIC_KEY"]
+        buildConfigField "String", "MARVEL_API_TS", apikeyProperties["MARVEL_API_TS"]
         buildConfigField "String", "MARVEL_API_HASH", apikeyProperties["MARVEL_API_HASH"]
     }
 

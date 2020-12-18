@@ -42,13 +42,14 @@ The app currently consists of 2 screens:
 
 You'll need to create your own API keys on [Marvel's developer site](https://developer.marvel.com/documentation/getting_started), check more information on their website.
 
-The API keys should be in an apikey.properties file in the root folder and will be loaded into the app as BuildConfig fields.
+The API keys should be in the apikey.properties file in the root folder, you'll need to add the values accordingly.
 
-        buildConfigField "String", "MARVEL_API_BASE_URL", apikeyProperties["MARVEL_API_BASE_URL"]
-        buildConfigField "String", "MARVEL_API_PUBLIC_KEY", apikeyProperties["MARVEL_API_PUBLIC_KEY"]
-        buildConfigField "String", "MARVEL_API_HASH", apikeyProperties["MARVEL_API_HASH"]
+        MARVEL_API_BASE_URL="hthttps://gateway.marvel.com/v1/public/"
+        MARVEL_API_PUBLIC_KEY="your public api"
+        MARVEL_API_TS="MarvelApp"
+        MARVEL_API_HASH="your md5(ts+privateKey+publicKey) hash"
 
-Or just replace and put your own API keys accordingly.
+
 
 ## Screenshots
 

@@ -23,9 +23,16 @@ abstract class BaseFragment : Fragment() {
         initializeInjector(fragmentComponent)
     }
 
-    internal fun showProgress() = progressStatus(View.VISIBLE)
+    protected fun showSpinner(show: Boolean?) {
+        when (show) {
+            true -> showProgress()
+            false -> hideProgress()
+        }
+    }
 
-    internal fun hideProgress() = progressStatus(View.GONE)
+    private fun showProgress() = progressStatus(View.VISIBLE)
+
+    private fun hideProgress() = progressStatus(View.GONE)
 
     private fun progressStatus(viewStatus: Int) =
         with(activity) {
@@ -33,11 +40,4 @@ abstract class BaseFragment : Fragment() {
                 this.showProgressStatus(viewStatus)
             }
         }
-
-    internal fun showSpinner(show: Boolean) {
-        when (show) {
-            true -> showProgress()
-            false -> hideProgress()
-        }
-    }
 }

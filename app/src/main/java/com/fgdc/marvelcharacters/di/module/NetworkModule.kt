@@ -35,9 +35,10 @@ class NetworkModule {
 
             val apiKey = BuildConfig.MARVEL_API_PUBLIC_KEY
             val hash = BuildConfig.MARVEL_API_HASH
+            val ts = BuildConfig.MARVEL_API_TS
 
             val url = originalHttpUrl.newBuilder()
-                .addQueryParameter("ts", "MarvelApp")
+                .addQueryParameter("ts", ts)
                 .addQueryParameter("apikey", apiKey)
                 .addQueryParameter("hash", hash)
                 .build()
