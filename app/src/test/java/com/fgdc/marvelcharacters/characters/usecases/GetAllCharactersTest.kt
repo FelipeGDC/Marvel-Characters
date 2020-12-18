@@ -1,11 +1,11 @@
-package com.fgdc.marvelcharacters.usecases
+package com.fgdc.marvelcharacters.characters.usecases
 
 import com.fgdc.marvelcharacters.data.datasource.remote.services.CharactersService
 import com.fgdc.marvelcharacters.data.repositories.CharactersRepositoryImpl
-import com.fgdc.marvelcharacters.domain.model.CharacterDetailDomain
-import com.fgdc.marvelcharacters.domain.usecases.GetCharacterById
-import com.fgdc.marvelcharacters.helpers.mockApiResponse
-import com.fgdc.marvelcharacters.helpers.mockCharacters
+import com.fgdc.marvelcharacters.domain.model.CharacterListDomain
+import com.fgdc.marvelcharacters.domain.usecases.GetAllCharacters
+import com.fgdc.marvelcharacters.utils.mockApiResponse
+import com.fgdc.marvelcharacters.utils.mockCharacters
 import com.fgdc.marvelcharacters.utils.functional.State
 import com.fgdc.marvelcharacters.utils.functional.Success
 import com.fgdc.marvelcharacters.utils.helpers.NetworkHandler
@@ -19,17 +19,17 @@ import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import retrofit2.Response
 
-class GetCharacterByIdTest {
+class GetAllCharactersTest {
 
     @Test
-    fun `should get specific character on success`() = runBlocking {
+    fun `should get all characters on success`() = runBlocking {
         val repository: CharactersRepositoryImpl
-        val getCharacterById: GetCharacterById
-        val characterId = 0
-        val character = mockCharacters(1)
+        val getAllCharacters: GetAllCharacters
+        val offset = 0
+        val character = mockCharacters(20)
         val mockResponse = mockApiResponse(character)
         val service = mock<CharactersService> {
-            onBlocking { getCharacterById(characterId) } doReturn Response.success(mockResponse)
+            onBlocking { getAllCharacters(offset) } doReturn Response.success(mockResponse)
         }
 
         val networkHandler = mock<NetworkHandler> {
@@ -37,16 +37,16 @@ class GetCharacterByIdTest {
         }
 
         repository = CharactersRepositoryImpl(service, networkHandler)
-        getCharacterById = GetCharacterById(repository)
+        getAllCharacters = GetAllCharacters(repository)
 
-        val flow: Flow<State<List<CharacterDetailDomain>>> =
-            getCharacterById.run(GetCharacterById.Params(characterId))
+        val flow: Flow<State<List<CharacterListDomain>>> =
+            getAllCharacters.run(GetAllCharacters.Params(offset))
 
         flow.collect { result ->
-            result.`should be instance of`<Success<List<CharacterDetailDomain>>>()
+            result.`should be instance of`<Success<List<CharacterListDomain>>>()
             when (result) {
-                is Success<List<CharacterDetailDomain>> -> {
-                    result.data shouldBeEqualTo character.map { it.toCharacterDetailDomain() }
+                is Success<List<CharacterListDomain>> -> {
+                    result.data shouldBeEqualTo character.map { it.toCharacterListDomain() }
                 }
             }
         }

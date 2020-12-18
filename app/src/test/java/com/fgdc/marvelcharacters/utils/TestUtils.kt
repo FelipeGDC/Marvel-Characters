@@ -1,4 +1,4 @@
-package com.fgdc.marvelcharacters.helpers
+package com.fgdc.marvelcharacters.utils
 
 import com.fgdc.marvelcharacters.data.datasource.remote.responses.*
 import com.fgdc.marvelcharacters.utils.extensions.empty

@@ -1,10 +1,10 @@
-package com.fgdc.marvelcharacters.repositories
+package com.fgdc.marvelcharacters.series
 
 import com.fgdc.marvelcharacters.data.datasource.remote.services.SeriesService
 import com.fgdc.marvelcharacters.data.repositories.SeriesRepositoryImpl
 import com.fgdc.marvelcharacters.domain.model.SeriesListDomain
-import com.fgdc.marvelcharacters.helpers.mockApiResponse
-import com.fgdc.marvelcharacters.helpers.mockSeries
+import com.fgdc.marvelcharacters.utils.mockApiResponse
+import com.fgdc.marvelcharacters.utils.mockSeries
 import com.fgdc.marvelcharacters.utils.functional.State
 import com.fgdc.marvelcharacters.utils.functional.Success
 import com.fgdc.marvelcharacters.utils.helpers.NetworkHandler

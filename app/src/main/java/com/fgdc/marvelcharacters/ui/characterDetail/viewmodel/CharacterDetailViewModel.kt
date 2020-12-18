@@ -69,7 +69,7 @@ class CharacterDetailViewModel @Inject constructor(
         }
     }
 
-    private fun getComicById(comicId: Int) {
+    fun getComicById(comicId: Int) {
         viewModelScope.launch {
             getComic(GetComicById.Params(comicId))
                 .onStart { handleShowSpinner(true) }
@@ -89,7 +89,7 @@ class CharacterDetailViewModel @Inject constructor(
         }
     }
 
-    private fun getSeriesById(seriesId: Int) {
+    fun getSeriesById(seriesId: Int) {
         viewModelScope.launch {
             getSeries(GetSeriesById.Params(seriesId))
                 .onStart { handleShowSpinner(true) }
