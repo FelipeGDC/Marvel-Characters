@@ -9,5 +9,7 @@ interface CharactersRepository {
 
     fun getAllCharacters(offset: Int): Flow<State<List<CharacterListDomain>>>
 
+    fun getCharactersByName(name: String): Flow<State<List<CharacterListDomain>>>
+
     fun getCharacterById(id: Int): Flow<State<List<CharacterDetailDomain>>>
 }

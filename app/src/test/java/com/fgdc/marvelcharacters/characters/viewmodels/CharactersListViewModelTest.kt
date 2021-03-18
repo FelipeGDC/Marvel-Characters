@@ -5,6 +5,7 @@ import androidx.lifecycle.Observer
 import com.fgdc.marvelcharacters.data.repositories.CharactersRepositoryImpl
 import com.fgdc.marvelcharacters.domain.model.CharacterListDomain
 import com.fgdc.marvelcharacters.domain.usecases.GetAllCharacters
+import com.fgdc.marvelcharacters.domain.usecases.GetCharactersByName
 import com.fgdc.marvelcharacters.ui.charactersList.models.CharacterListView
 import com.fgdc.marvelcharacters.ui.charactersList.viewmodel.CharactersListViewModel
 import com.fgdc.marvelcharacters.utils.CoroutineTestRule
@@ -28,6 +29,7 @@ class CharactersListViewModelTest {
 
     private lateinit var viewModel: CharactersListViewModel
     private lateinit var getAllCharacters: GetAllCharacters
+    private lateinit var getCharactersByName: GetCharactersByName
 
     private var repository = mock<CharactersRepositoryImpl>()
     private val charactersObserver = mock<Observer<List<CharacterListView>>>()
@@ -45,7 +47,8 @@ class CharactersListViewModelTest {
     @Before
     fun setup() {
         getAllCharacters = GetAllCharacters(repository)
-        viewModel = CharactersListViewModel(getAllCharacters).apply {
+        getCharactersByName = GetCharactersByName(repository)
+        viewModel = CharactersListViewModel(getAllCharacters, getCharactersByName).apply {
             charactersResponse.observeForever(charactersObserver)
             moreCharactersResponse.observeForever(moreCharactersObserver)
             failure.observeForever(isErrorObserver)
@@ -55,7 +58,8 @@ class CharactersListViewModelTest {
     @Test
     fun `should emit get characters on success`() =
         coroutinesRule.dispatcher.runBlockingTest {
-            val expectedCharacters = Success(mockCharacters(maxOffset).map { it.toCharacterListDomain() })
+            val expectedCharacters =
+                Success(mockCharacters(maxOffset).map { it.toCharacterListDomain() })
 
             val channel = Channel<Success<List<CharacterListDomain>>>()
             val flow = channel.consumeAsFlow()
@@ -77,7 +81,8 @@ class CharactersListViewModelTest {
     @Test
     fun `should emit get more characters on success`() =
         coroutinesRule.dispatcher.runBlockingTest {
-            val expectedCharacters = Success(mockCharacters(maxOffset).map { it.toCharacterListDomain() })
+            val expectedCharacters =
+                Success(mockCharacters(maxOffset).map { it.toCharacterListDomain() })
 
             val channel = Channel<Success<List<CharacterListDomain>>>()
             val flow = channel.consumeAsFlow()
@@ -100,7 +105,8 @@ class CharactersListViewModelTest {
     fun `should emit error on get characters lookup failure`() =
         coroutinesRule.dispatcher.runBlockingTest {
 
-            val expectedCharacters = Success(mockCharacters(maxOffset).map { it.toCharacterListDomain() })
+            val expectedCharacters =
+                Success(mockCharacters(maxOffset).map { it.toCharacterListDomain() })
             val expectedError = Error(Throwable())
 
             val channel = Channel<Success<List<CharacterListDomain>>>()

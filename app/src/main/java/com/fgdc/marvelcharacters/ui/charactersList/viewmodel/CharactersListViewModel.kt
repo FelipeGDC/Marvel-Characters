@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.fgdc.marvelcharacters.domain.model.CharacterListDomain
 import com.fgdc.marvelcharacters.domain.usecases.GetAllCharacters
+import com.fgdc.marvelcharacters.domain.usecases.GetCharactersByName
 import com.fgdc.marvelcharacters.ui.base.BaseViewModel
 import com.fgdc.marvelcharacters.ui.charactersList.models.CharacterListView
 import com.fgdc.marvelcharacters.utils.functional.BadRequest
@@ -18,7 +19,10 @@ import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
-class CharactersListViewModel @Inject constructor(val getAllCharacters: GetAllCharacters) :
+class CharactersListViewModel @Inject constructor(
+    private val getAllCharacters: GetAllCharacters,
+    private val getCharactersByName: GetCharactersByName
+) :
     BaseViewModel() {
 
     companion object {
@@ -30,6 +34,8 @@ class CharactersListViewModel @Inject constructor(val getAllCharacters: GetAllCh
     var charactersList: MutableList<CharacterListView> = mutableListOf()
     var charactersResponse = MutableLiveData<List<CharacterListView>>()
     var moreCharactersResponse = MutableLiveData<List<CharacterListView>>()
+    var loading = MutableLiveData<Boolean>()
+    var noResult = MutableLiveData<Boolean>()
 
     fun getAllCharacters() {
         viewModelScope.launch {
@@ -67,9 +73,42 @@ class CharactersListViewModel @Inject constructor(val getAllCharacters: GetAllCh
         }
     }
 
+    fun getCharactersByName(name: String) {
+        viewModelScope.launch {
+            getCharactersByName(GetCharactersByName.Params(name))
+                .onStart { loading.postValue(true) }
+                .onEach { loading.postValue(false) }
+                .catch { failure -> handleFailure(failure) }.collect { result ->
+                    when (result) {
+                        is Success<List<CharacterListDomain>> -> handleSuccessGetCharactersByName(
+                            result.data
+                        )
+                        is Error -> handleFailure(result.exception)
+                        is ErrorNoConnection -> handleFailure(result.exception)
+                        is BadRequest -> handleBadRequest(result.exception)
+                    }
+                }
+        }
+    }
+
+    fun resetToDefaultList() {
+        if (charactersList.size > 0) {
+            charactersResponse.postValue(charactersList)
+        }
+    }
+
     private fun handleSuccessGetAllCharacters(data: List<CharacterListDomain>) {
         charactersList = data.map { it.toCharacterView() }.toMutableList()
         charactersResponse.postValue(charactersList)
+    }
+
+    private fun handleSuccessGetCharactersByName(data: List<CharacterListDomain>) {
+        if (data.isNotEmpty()) {
+            noResult.postValue(false)
+            charactersResponse.postValue(data.map { it.toCharacterView() }.toMutableList())
+        } else {
+            noResult.postValue(true)
+        }
     }
 
     private fun handleSuccessGetMoreCharacters(data: List<CharacterListDomain>) {
@@ -81,7 +120,14 @@ class CharactersListViewModel @Inject constructor(val getAllCharacters: GetAllCh
         val filteredList = charactersList.filter { character ->
             containsText(character, text.toLowerCase(Locale.getDefault()))
         }
-        charactersResponse.postValue(filteredList)
+        if (filteredList.isNotEmpty()) {
+            loading.postValue(false)
+            noResult.postValue(false)
+            charactersResponse.postValue(filteredList)
+        } else {
+            loading.postValue(true)
+            charactersResponse.postValue(filteredList)
+        }
     }
 
     private fun containsText(character: CharacterListView, text: String): Boolean {

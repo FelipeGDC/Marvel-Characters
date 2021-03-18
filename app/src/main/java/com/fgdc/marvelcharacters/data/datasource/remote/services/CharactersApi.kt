@@ -15,6 +15,9 @@ interface CharactersApi {
     @GET(CHARACTERS_ENDPOINT)
     suspend fun getAllCharacters(@Query("offset") offset: Int): Response<ApiResponse<CharacterMarvel>>
 
+    @GET(CHARACTERS_ENDPOINT)
+    suspend fun getCharactersByName(@Query("name") name: String): Response<ApiResponse<CharacterMarvel>>
+
     @GET(CHARACTERS_ENDPOINT.plus("/{character_id}"))
     suspend fun getCharacterById(@Path("character_id") characterId: Int): Response<ApiResponse<CharacterMarvel>>
 }

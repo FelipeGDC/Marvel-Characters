@@ -28,7 +28,6 @@ class CharacterDetailFragment : BaseFragment() {
     lateinit var characterDetailViewModel: CharacterDetailViewModel
     override fun initializeInjector(viewComponent: ViewComponent) = viewComponent.inject(this)
 
-    private lateinit var binding: FragmentCharacterDetailBinding
     private val args: CharacterDetailFragmentArgs by navArgs()
     private val comicsAdapter = ComicsListAdapter()
     private val seriesAdapter = SeriesListAdapter()
@@ -44,6 +43,8 @@ class CharacterDetailFragment : BaseFragment() {
             observe(seriesListResponse, ::setSeriesCarousel)
         }
     }
+
+    private lateinit var binding: FragmentCharacterDetailBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,10 +73,10 @@ class CharacterDetailFragment : BaseFragment() {
                 binding.characterDescription.visibility = View.GONE
                 binding.characterDescriptionLabel.visibility = View.GONE
             }
-            binding.backButton.setOnClickListener{
+            binding.backButton.setOnClickListener {
                 findNavController().navigateUp()
             }
-            binding.backButtonSecondary.setOnClickListener{
+            binding.backButtonSecondary.setOnClickListener {
                 findNavController().navigateUp()
             }
         }

@@ -3,6 +3,7 @@ package com.fgdc.marvelcharacters.di.module
 import com.fgdc.marvelcharacters.data.repositories.CharactersRepository
 import com.fgdc.marvelcharacters.data.repositories.ComicsRepository
 import com.fgdc.marvelcharacters.data.repositories.SeriesRepository
+import com.fgdc.marvelcharacters.domain.usecases.GetCharactersByName
 import com.fgdc.marvelcharacters.domain.usecases.GetAllCharacters
 import com.fgdc.marvelcharacters.domain.usecases.GetCharacterById
 import com.fgdc.marvelcharacters.domain.usecases.GetComicById
@@ -16,6 +17,10 @@ class UseCaseModule {
     @Provides
     fun provideGetAllCharactersUseCase(charactersRepository: CharactersRepository): GetAllCharacters =
         GetAllCharacters(charactersRepository)
+
+    @Provides
+    fun provideGetCharactersByNameUseCase(charactersRepository: CharactersRepository): GetCharactersByName =
+        GetCharactersByName(charactersRepository)
 
     @Provides
     fun provideGetCharacterByIdUseCase(charactersRepository: CharactersRepository): GetCharacterById =

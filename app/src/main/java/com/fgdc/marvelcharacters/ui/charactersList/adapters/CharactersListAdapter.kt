@@ -2,6 +2,8 @@ package com.fgdc.marvelcharacters.ui.charactersList.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -10,9 +12,14 @@ import com.fgdc.marvelcharacters.databinding.ItemCharacterBinding
 import com.fgdc.marvelcharacters.ui.charactersList.fragment.CharactersListFragmentDirections
 import com.fgdc.marvelcharacters.ui.charactersList.models.CharacterListView
 import com.fgdc.marvelcharacters.utils.extensions.circleListLoad
+import java.util.*
 
 class CharactersListAdapter :
-    ListAdapter<CharacterListView, CharactersListAdapter.CharactersViewHolder>(DIFF_CALLBACK) {
+    ListAdapter<CharacterListView, CharactersListAdapter.CharactersViewHolder>(DIFF_CALLBACK),
+    Filterable {
+
+    var currentListItems: List<CharacterListView>? = null
+    private var listItemsFiltered: List<CharacterListView>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharactersViewHolder {
         val binding =
@@ -27,6 +34,44 @@ class CharactersListAdapter :
         val characterItem = getItem(position)
         if (characterItem != null) {
             holder.bind(characterItem)
+        }
+    }
+
+    override fun getFilter(): Filter {
+
+        return object : Filter() {
+            override fun performFiltering(charSequence: CharSequence): FilterResults {
+
+                val charString = charSequence.toString()
+                if (charString.isEmpty()) {
+                    listItemsFiltered = currentListItems
+                } else {
+                    currentListItems?.let {
+                        val filteredList = arrayListOf<CharacterListView>()
+                        for (item in currentListItems!!) {
+                            if (charString.toLowerCase(Locale.ENGLISH) in item.name.toLowerCase(
+                                    Locale.ENGLISH
+                                )
+                            ) {
+                                filteredList.add(item)
+                            }
+                        }
+
+                        listItemsFiltered = filteredList
+                    }
+                }
+                val filterResults = FilterResults()
+                filterResults.values = listItemsFiltered
+                return filterResults
+            }
+
+            override fun publishResults(
+                charSequence: CharSequence,
+                filterResults: FilterResults
+            ) {
+                listItemsFiltered = filterResults.values as List<CharacterListView>?
+                submitList(listItemsFiltered)
+            }
         }
     }
 

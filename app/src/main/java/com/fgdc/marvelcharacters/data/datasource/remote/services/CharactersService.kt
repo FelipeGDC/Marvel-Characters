@@ -13,6 +13,9 @@ class CharactersService @Inject constructor(retrofit: Retrofit) : CharactersApi 
     override suspend fun getAllCharacters(offset: Int): Response<ApiResponse<CharacterMarvel>> =
         charactersApi.getAllCharacters(offset)
 
+    override suspend fun getCharactersByName(name: String): Response<ApiResponse<CharacterMarvel>> =
+        charactersApi.getCharactersByName(name)
+
     override suspend fun getCharacterById(characterId: Int): Response<ApiResponse<CharacterMarvel>> =
         charactersApi.getCharacterById(characterId)
 }

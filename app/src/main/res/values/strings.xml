@@ -2,13 +2,15 @@
     <string name="app_name">Marvel Characters</string>
 
     <!-- Lottie files-->
-    <string name="lottie_loader">loader-deadpool.json</string>
+    <string name="lottie_loader">loading/loader-deadpool.json</string>
+    <string name="lottie_empty">loading/empty_web.json</string>
 
     <!-- Error messages -->
     <string name="bad_request">Bad request</string>
     <string name="error_connection">Error connection</string>
     <string name="error_title">Error</string>
     <string name="common_error">An error has occurred\nPlease try again</string>
+    <string name="empty_result">We were unable to find such character\nMake sure you wrote their full name and please try again.</string>
     <string name="try_again">Try again</string>
 
     <!-- Dialogs -->
@@ -22,5 +24,7 @@
     <string name="character_events">Events</string>
     <string name="comic_price">$%.2f</string>
 
+    <!-- Menu -->
+    <string name="search_button">Search</string>
 
 </resources>
