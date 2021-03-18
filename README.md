@@ -4,6 +4,14 @@
 Application to test the Marvel API, and test different libraries like the Jetpack Component suite.
 Architecture approach inspired by DDD and CLEAN concepts.
 
+## Search functionality 🔍
+Currently as it is, the API presents some limitations regarding the searching of characters (or anything actually). The service receives the name of the character through a Get parameter, but it needs to be the exact name, otherwise it will not return any results.
+This presents us with the issues of if I wanted to search for the character of "Ms. Marvel (Kamala Khan)", I could not write Marvel, or Kamala and expect any results, it would have to be the entire name, which makes the whole interaction rather cumbersome.
+
+Before this, I attempted to implement a search using my current "endless scrolling" functionality. Since is rather easy to filter through the elements already loaded into the adapter list, I thought of filtering for results, if I did not get any, I would load more characters through the service and add them to the current list, and search again.
+This worked, but it was not particularly functional nor practical, for searching characters with the letter 'H', it would need to load all the characters before, and it would take a while. With a character starting with 'Z' it would be too long and unusable, nor it was easy to communicate what was happening.
+For this reason, I decided to proceed with the first approach eve if the API was limiting, for the time being it felt like the most sensible approach.
+
 
 ## Screens 📱
 The app currently consists of 2 screens:
