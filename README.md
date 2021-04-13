@@ -53,9 +53,7 @@ The API keys should be in the apikey.properties file in the root folder, you'll 
 
 ## Screenshots
 
-![list_characters](https://github.com/FelipeGDC/Marvel-Characters/blob/develop/images/characters-list.png)
-![character_detail](https://github.com/FelipeGDC/Marvel-Characters/blob/develop/images/character-detail.png)
-<img src="https://github.com/FelipeGDC/Marvel-Characters/blob/develop/images/characters-list.png" width="100">
-<img src="https://github.com/FelipeGDC/Marvel-Characters/blob/develop/images/character-detail.png" width="100">
+<img src="https://github.com/FelipeGDC/Marvel-Characters/blob/develop/images/characters-list.png" width="200">
+<img src="https://github.com/FelipeGDC/Marvel-Characters/blob/develop/images/character-detail.png" width="200">
 
 
