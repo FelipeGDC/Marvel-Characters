@@ -2,14 +2,16 @@ package com.fgdc.marvelcharacters.ui.charactersList.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.fgdc.marvelcharacters.R
 import com.fgdc.marvelcharacters.databinding.ItemCharacterBinding
 import com.fgdc.marvelcharacters.ui.charactersList.fragment.CharactersListFragmentDirections
 import com.fgdc.marvelcharacters.ui.charactersList.models.CharacterListView
-import com.fgdc.marvelcharacters.utils.extensions.circleListLoad
+import com.fgdc.marvelcharacters.utils.extensions.squaredListLoad
 
 class CharactersListAdapter :
     ListAdapter<CharacterListView, CharactersListAdapter.CharactersViewHolder>(DIFF_CALLBACK) {
@@ -33,11 +35,20 @@ class CharactersListAdapter :
     inner class CharactersViewHolder(private val itemBinding: ItemCharacterBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(character: CharacterListView) {
-            itemBinding.characterName.text = character.name
-            itemBinding.characterImage.circleListLoad(character.image, itemBinding.root.context)
-            itemBinding.root.setOnClickListener {
-                itemBinding.root.findNavController()
-                    .navigate(CharactersListFragmentDirections.actionListToCharacterDetail(character.id))
+            itemBinding.apply {
+                item.animation = AnimationUtils.loadAnimation(itemView.context, R.anim.down_to_up)
+                characterId.text =
+                    root.context.getString(R.string.character_id, character.id.toString())
+                characterName.text = character.name
+                characterImage.squaredListLoad(character.image, itemBinding.root.context)
+                root.setOnClickListener {
+                    root.findNavController()
+                        .navigate(
+                            CharactersListFragmentDirections.actionListToCharacterDetail(
+                                character.id
+                            )
+                        )
+                }
             }
         }
     }

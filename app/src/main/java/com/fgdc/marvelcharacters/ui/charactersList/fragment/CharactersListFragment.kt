@@ -50,17 +50,21 @@ class CharactersListFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.rvCharacters.endless { charactersListViewModel.charactersListScrolled() }
-        binding.rvCharacters.adapter = adapter
-        if (adapter.itemCount == 0) {
-            charactersListViewModel.getAllCharacters()
+        binding.apply {
+            rvCharacters.endless { charactersListViewModel.charactersListScrolled() }
+            rvCharacters.adapter = adapter
+            if (adapter.itemCount == 0) {
+                charactersListViewModel.getAllCharacters()
+            }
         }
     }
 
     private fun setListOfCharacters(characters: List<CharacterListView>?) {
-        binding.emptyView.visibility = View.GONE
-        binding.rvCharacters.visibility = View.VISIBLE
-        adapter.submitList(characters ?: emptyList())
+        binding.apply {
+            emptyView.visibility = View.GONE
+            rvCharacters.visibility = View.VISIBLE
+            adapter.submitList(characters ?: emptyList())
+        }
     }
 
     private fun addMoreCharacters(characters: List<CharacterListView>?) {
@@ -69,22 +73,25 @@ class CharactersListFragment : BaseFragment() {
 
     private fun handleFailure(failure: Throwable?) {
         if (failure?.message == ErrorHandler.NETWORK_ERROR_MESSAGE) {
-            binding.rvCharacters.visibility = View.GONE
-            binding.emptyView.visibility = View.VISIBLE
-            binding.errorMessage.text = failure.message ?: getString(R.string.common_error)
-            binding.tryAgainBtn.setOnClickListener {
-                charactersListViewModel.getAllCharacters()
+            binding.apply {
+                rvCharacters.visibility = View.GONE
+                emptyView.visibility = View.VISIBLE
+                errorMessage.text = failure.message ?: getString(R.string.common_error)
+                tryAgainBtn.setOnClickListener {
+                    charactersListViewModel.getAllCharacters()
+                }
             }
         }
     }
 
     private fun handleBadRequest(failure: Throwable?) {
-        binding.rvCharacters.visibility = View.GONE
-        binding.emptyView.visibility = View.VISIBLE
-        binding.errorMessage.text = failure?.message ?: getString(R.string.common_error)
-
-        binding.tryAgainBtn.setOnClickListener {
-            charactersListViewModel.getAllCharacters()
+        binding.apply {
+            rvCharacters.visibility = View.GONE
+            emptyView.visibility = View.VISIBLE
+            errorMessage.text = failure?.message ?: getString(R.string.common_error)
+            tryAgainBtn.setOnClickListener {
+                charactersListViewModel.getAllCharacters()
+            }
         }
     }
 }

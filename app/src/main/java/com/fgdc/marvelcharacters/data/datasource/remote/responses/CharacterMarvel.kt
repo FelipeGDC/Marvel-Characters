@@ -31,7 +31,7 @@ data class CharacterMarvel(
     val urls: List<Url>
 ) {
     fun toCharacterListDomain() =
-        CharacterListDomain(id, name, (thumbnail.path + "." + thumbnail.extension))
+        CharacterListDomain(id, name, (thumbnail.path + "." + thumbnail.extension), description)
 
     fun toCharacterDetailDomain() =
         CharacterDetailDomain(

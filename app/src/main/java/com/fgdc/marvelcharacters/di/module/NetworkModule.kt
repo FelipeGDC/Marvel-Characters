@@ -4,6 +4,7 @@ import android.content.Context
 import com.fgdc.marvelcharacters.BuildConfig
 import com.fgdc.marvelcharacters.data.datasource.remote.services.*
 import com.fgdc.marvelcharacters.utils.helpers.NetworkHandler
+import com.fgdc.marvelcharacters.utils.helpers.NetworkHandlerImpl
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -62,5 +63,5 @@ class NetworkModule {
     }
 
     @Provides
-    fun providesNetworkHandler(context: Context): NetworkHandler = NetworkHandler(context)
+    fun providesNetworkHandler(context: Context): NetworkHandler = NetworkHandlerImpl(context)
 }

@@ -5,10 +5,10 @@ import android.widget.ImageView
 import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.load
-import coil.transform.CircleCropTransformation
+import coil.transform.RoundedCornersTransformation
 import com.fgdc.marvelcharacters.R
 
-fun ImageView.circleListLoad(url: String, context: Context) {
+fun ImageView.squaredListLoad(url: String, context: Context) {
     this.load(
         url,
         ImageLoader.Builder(context).componentRegistry {
@@ -17,7 +17,7 @@ fun ImageView.circleListLoad(url: String, context: Context) {
     ) {
         placeholder(R.drawable.placeholder_list_image)
         error(R.drawable.placeholder_list_image)
-        transformations(CircleCropTransformation())
+        transformations(RoundedCornersTransformation(50f))
     }
 }
 

@@ -4,11 +4,13 @@ import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.fgdc.marvelcharacters.R
 import com.fgdc.marvelcharacters.databinding.ItemSeriesBinding
 import com.fgdc.marvelcharacters.ui.characterDetail.models.SeriesListView
 import com.fgdc.marvelcharacters.utils.extensions.simpleLoad
@@ -31,15 +33,20 @@ class SeriesListAdapter :
     inner class SeriesViewHolder(private val itemBinding: ItemSeriesBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(series: SeriesListView) {
-            itemBinding.seriesCover.simpleLoad(series.image, itemBinding.root.context)
-            itemBinding.seriesTitle.text = series.title
-
-            itemBinding.root.setOnClickListener {
-                itemBinding.root.findNavController()
-                val defaultBrowser =
-                    Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, Intent.CATEGORY_APP_BROWSER)
-                defaultBrowser.data = Uri.parse(series.url)
-                ContextCompat.startActivity(itemBinding.root.context, defaultBrowser, null)
+            itemBinding.apply {
+                item.animation = AnimationUtils.loadAnimation(itemView.context, R.anim.left_to_right)
+                seriesCover.simpleLoad(series.image, root.context)
+                seriesTitle.text = series.title
+                root.setOnClickListener {
+                    root.findNavController()
+                    val defaultBrowser =
+                        Intent.makeMainSelectorActivity(
+                            Intent.ACTION_MAIN,
+                            Intent.CATEGORY_APP_BROWSER
+                        )
+                    defaultBrowser.data = Uri.parse(series.url)
+                    ContextCompat.startActivity(root.context, defaultBrowser, null)
+                }
             }
         }
     }

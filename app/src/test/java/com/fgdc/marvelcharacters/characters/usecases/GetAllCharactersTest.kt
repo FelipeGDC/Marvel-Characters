@@ -24,7 +24,6 @@ class GetAllCharactersTest {
     @Test
     fun `should get all characters on success`() = runBlocking {
         val repository: CharactersRepositoryImpl
-        val getAllCharacters: GetAllCharacters
         val offset = 0
         val character = mockCharacters(20)
         val mockResponse = mockApiResponse(character)
@@ -37,7 +36,7 @@ class GetAllCharactersTest {
         }
 
         repository = CharactersRepositoryImpl(service, networkHandler)
-        getAllCharacters = GetAllCharacters(repository)
+        val getAllCharacters: GetAllCharacters = GetAllCharacters(repository)
 
         val flow: Flow<State<List<CharacterListDomain>>> =
             getAllCharacters.run(GetAllCharacters.Params(offset))

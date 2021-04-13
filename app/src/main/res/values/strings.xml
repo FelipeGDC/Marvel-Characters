@@ -14,6 +14,9 @@
     <!-- Dialogs -->
     <string name="accept_btn">Accept</string>
 
+    <!-- List fragment -->
+    <string name="character_id">#%1s</string>
+
     <!-- Detail fragment -->
     <string name="character_info">Information</string>
     <string name="character_description">Description</string>

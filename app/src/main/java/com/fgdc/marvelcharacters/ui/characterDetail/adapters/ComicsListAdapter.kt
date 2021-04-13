@@ -5,6 +5,7 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
@@ -33,23 +34,26 @@ class ComicsListAdapter :
     inner class ComicsViewHolder(private val itemBinding: ItemComicBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(comic: ComicListView) {
-            itemBinding.comicCover.simpleLoad(comic.image, itemBinding.root.context)
-            itemBinding.comicTitle.text = comic.title
+            itemBinding.apply {
+                item.animation = AnimationUtils.loadAnimation(itemView.context, R.anim.left_to_right)
+                comicCover.simpleLoad(comic.image, root.context)
+                comicTitle.text = comic.title
 
-            if (comic.price != 0.0) {
-                itemBinding.comicPrice.visibility = View.VISIBLE
-                itemBinding.comicPrice.text =
-                    itemBinding.root.context.getString(R.string.comic_price, comic.price)
-            } else {
-                itemBinding.comicPrice.visibility = View.GONE
-            }
+                if (comic.price != 0.0) {
+                    comicPrice.visibility = View.VISIBLE
+                    comicPrice.text =
+                        root.context.getString(R.string.comic_price, comic.price)
+                } else {
+                    comicPrice.visibility = View.GONE
+                }
 
-            itemBinding.root.setOnClickListener {
-                itemBinding.root.findNavController()
-                val defaultBrowser =
-                    Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, Intent.CATEGORY_APP_BROWSER)
-                defaultBrowser.data = Uri.parse(comic.url)
-                startActivity(itemBinding.root.context, defaultBrowser, null)
+                root.setOnClickListener {
+                    root.findNavController()
+                    val defaultBrowser =
+                        Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, Intent.CATEGORY_APP_BROWSER)
+                    defaultBrowser.data = Uri.parse(comic.url)
+                    startActivity(root.context, defaultBrowser, null)
+                }
             }
         }
     }

@@ -57,51 +57,59 @@ class CharacterDetailFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         characterDetailViewModel.getCharacterById(args.characterId)
-        binding.rvComics.adapter = comicsAdapter
-        binding.rvSeries.adapter = seriesAdapter
+        binding.apply {
+            rvComics.adapter = comicsAdapter
+            rvSeries.adapter = seriesAdapter
+        }
     }
 
     private fun setCharacterDetail(characterDetailView: CharacterDetailView?) {
         characterDetailView?.let {
-            binding.characterImage.simpleLoad(characterDetailView.image, requireContext())
-            binding.toolbarTitle.text = characterDetailView.name
-            binding.title.text = characterDetailView.name
-            if (characterDetailView.description.isNotEmpty()) {
-                binding.characterDescription.text = characterDetailView.description
-            } else {
-                binding.characterDescription.visibility = View.GONE
-                binding.characterDescriptionLabel.visibility = View.GONE
-            }
-            binding.backButton.setOnClickListener{
-                findNavController().navigateUp()
-            }
-            binding.backButtonSecondary.setOnClickListener{
-                findNavController().navigateUp()
+            binding.apply {
+                characterImage.simpleLoad(characterDetailView.image, requireContext())
+                toolbarTitle.text = characterDetailView.name
+                title.text = characterDetailView.name
+                if (characterDetailView.description.isNotEmpty()) {
+                    characterDescription.text = characterDetailView.description
+                } else {
+                    characterDescription.visibility = View.GONE
+                    characterDescriptionLabel.visibility = View.GONE
+                }
+                backButton.setOnClickListener {
+                    findNavController().navigateUp()
+                }
+                backButtonSecondary.setOnClickListener {
+                    findNavController().navigateUp()
+                }
             }
         }
     }
 
     private fun setComicsCarousel(comics: List<ComicListView>?) {
         comicsAdapter.submitList(comics?.sortedBy { it.title } ?: emptyList())
-        binding.rvComics.scrollToPosition(0)
-        if (comicsAdapter.itemCount == 0) {
-            binding.characterComicsLabel.visibility = View.GONE
-            binding.rvComics.visibility = View.GONE
-        } else {
-            binding.characterComicsLabel.visibility = View.VISIBLE
-            binding.rvComics.visibility = View.VISIBLE
+        binding.apply {
+            rvComics.scrollToPosition(0)
+            if (comicsAdapter.itemCount == 0) {
+                characterComicsLabel.visibility = View.GONE
+                rvComics.visibility = View.GONE
+            } else {
+                characterComicsLabel.visibility = View.VISIBLE
+                rvComics.visibility = View.VISIBLE
+            }
         }
     }
 
     private fun setSeriesCarousel(series: List<SeriesListView>?) {
         seriesAdapter.submitList(series?.sortedBy { it.title } ?: emptyList())
-        binding.rvSeries.scrollToPosition(0)
-        if (seriesAdapter.itemCount == 0) {
-            binding.characterSeriesLabel.visibility = View.GONE
-            binding.rvSeries.visibility = View.GONE
-        } else {
-            binding.characterSeriesLabel.visibility = View.VISIBLE
-            binding.rvSeries.visibility = View.VISIBLE
+        binding.apply {
+            rvSeries.scrollToPosition(0)
+            if (seriesAdapter.itemCount == 0) {
+                characterSeriesLabel.visibility = View.GONE
+                rvSeries.visibility = View.GONE
+            } else {
+                characterSeriesLabel.visibility = View.VISIBLE
+                rvSeries.visibility = View.VISIBLE
+            }
         }
     }
 
