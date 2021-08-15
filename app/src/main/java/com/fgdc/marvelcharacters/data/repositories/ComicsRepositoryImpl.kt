@@ -18,7 +18,7 @@ class ComicsRepositoryImpl @Inject constructor(
 ) : ComicsRepository {
     override fun getComicById(id: Int): Flow<State<List<ComicListDomain>>> = flow {
         emit(
-            if (networkHandler.isConnected == true) {
+            if (networkHandler.isInternetAvailable()) {
                 apiService.getComicById(id).run {
                     if (isSuccessful && body() != null) {
                         Success(body()!!.apiData.results.map { it.toComicListDomain() })

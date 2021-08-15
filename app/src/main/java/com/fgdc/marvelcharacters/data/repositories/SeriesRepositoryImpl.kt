@@ -18,7 +18,7 @@ class SeriesRepositoryImpl @Inject constructor(
 ) : SeriesRepository {
     override fun getSeriesById(id: Int): Flow<State<List<SeriesListDomain>>> = flow {
         emit(
-            if (networkHandler.isConnected == true) {
+            if (networkHandler.isInternetAvailable()) {
                 apiService.getSeriesById(id).run {
                     if (isSuccessful && body() != null) {
                         Success(body()!!.apiData.results.map { it.toSeriesListDomain() })

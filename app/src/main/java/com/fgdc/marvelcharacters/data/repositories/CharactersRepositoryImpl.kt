@@ -20,7 +20,7 @@ class CharactersRepositoryImpl @Inject constructor(
 ) : CharactersRepository {
     override fun getAllCharacters(offset: Int) = flow {
         emit(
-            if (networkHandler.isConnected == true) {
+            if (networkHandler.isInternetAvailable()) {
                 apiService.getAllCharacters(offset).run {
                     if (isSuccessful && body() != null) {
                         Success(body()!!.apiData.results.map { it.toCharacterListDomain() })
@@ -39,7 +39,7 @@ class CharactersRepositoryImpl @Inject constructor(
 
     override fun getCharacterById(id: Int) = flow {
         emit(
-            if (networkHandler.isConnected == true) {
+            if (networkHandler.isInternetAvailable()) {
                 apiService.getCharacterById(id).run {
                     if (isSuccessful && body() != null) {
                         Success(body()!!.apiData.results.map { it.toCharacterDetailDomain() })
