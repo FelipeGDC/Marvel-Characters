@@ -53,7 +53,6 @@ The API keys should be in the apikey.properties file in the root folder, you'll 
 
 ## Screenshots
 
-<img src="./images/characters-list.png" width="200">
-<img src="./images/character-detail.png" width="200">
+<img src="./images/characters-list.png" width="200"> <img src="./images/character-detail.png" width="200">
 
 
