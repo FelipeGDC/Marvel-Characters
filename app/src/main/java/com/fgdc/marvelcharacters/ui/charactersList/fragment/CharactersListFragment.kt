@@ -4,25 +4,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.fgdc.marvelcharacters.R
 import com.fgdc.marvelcharacters.databinding.FragmentCharactersListBinding
-import com.fgdc.marvelcharacters.di.component.ViewComponent
-import com.fgdc.marvelcharacters.ui.base.BaseFragment
 import com.fgdc.marvelcharacters.ui.charactersList.adapters.CharactersListAdapter
 import com.fgdc.marvelcharacters.ui.charactersList.models.CharacterListView
 import com.fgdc.marvelcharacters.ui.charactersList.viewmodel.CharactersListViewModel
 import com.fgdc.marvelcharacters.utils.exception.ErrorHandler
 import com.fgdc.marvelcharacters.utils.extensions.endless
-import com.fgdc.marvelcharacters.utils.extensions.failure
 import com.fgdc.marvelcharacters.utils.extensions.observe
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-class CharactersListFragment : BaseFragment() {
+@AndroidEntryPoint
+class CharactersListFragment : Fragment() {
 
-    @Inject
-    lateinit var charactersListViewModel: CharactersListViewModel
-
-    override fun initializeInjector(viewComponent: ViewComponent) = viewComponent.inject(this)
+    private val charactersListViewModel: CharactersListViewModel by viewModels()
 
     private lateinit var binding: FragmentCharactersListBinding
     private val adapter = CharactersListAdapter()
@@ -30,9 +28,6 @@ class CharactersListFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         with(charactersListViewModel) {
-            observe(showSpinner, ::showSpinner)
-            failure(failure, ::handleFailure)
-            failure(badRequest, ::handleBadRequest)
             observe(charactersResponse, ::setListOfCharacters)
             observe(moreCharactersResponse, ::addMoreCharacters)
         }

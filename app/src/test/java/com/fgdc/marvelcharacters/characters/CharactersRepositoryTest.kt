@@ -30,7 +30,6 @@ class CharactersRepositoryTest {
         val service = mock<CharactersService> {
             onBlocking { getAllCharacters(offset) } doReturn Response.success(mockResponse)
         }
-        service.getAllCharacters(offset).body() shouldBeEqualTo mockResponse
 
         val networkHandler = mock<NetworkHandler> {
             onBlocking { isConnected } doReturn true

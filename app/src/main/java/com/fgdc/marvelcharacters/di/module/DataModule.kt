@@ -7,8 +7,11 @@ import com.fgdc.marvelcharacters.data.repositories.*
 import com.fgdc.marvelcharacters.utils.helpers.NetworkHandler
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 
 @Module
+@InstallIn(SingletonComponent::class)
 class DataModule {
 
     @Provides

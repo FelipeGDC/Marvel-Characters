@@ -1,0 +1,95 @@
+ext {
+    kotlin_version = "1.5.21"
+    kotlin_coroutine_version = "1.5.1"
+    lifecycle_version = "2.4.0-alpha02"
+    hilt_version = "2.38.1"
+    nav_version = "2.3.5"
+    mockk_version = "1.12.0"
+    junit_version = "4.13.2"
+    kluent_version = "1.68"
+    lottie_version = "4.1.0"
+    okhttp_version = "4.9.1"
+    retrofit_version = "2.9.0"
+    moshi_version = "1.12.0"
+    coil_version = "1.3.2"
+    circle_indicator = "2.1.6"
+    why_not_image_carousel = "2.0.4"
+
+    androidXCore_version = "1.6.0"
+    appcompat_version = "1.3.1"
+    constraintLayout_version = "2.1.0"
+    material_version = "1.4.0"
+    fragmentx_version = "1.3.6"
+    recyclerView_version = '1.2.1'
+    robolectric_version = '1.4.0'
+    testRunner_version = '1.2.0'
+    espresso_version = '3.4.0'
+    rules_version = '1.2.0'
+    junitKtx_version = '1.1.1'
+    archCore = "2.1.0"
+    turbine = "0.6.0"
+
+    sdk_compile = 30
+    sdk_min = 21
+    sdk_target = 30
+
+
+    kotlin = [
+            stdlib        : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
+            coroutinesCore: "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutine_version",
+            coroutines    : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutine_version",
+            reflect       : "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    ]
+    android = [
+            androidxCore      : "androidx.core:core-ktx:$androidXCore_version",
+            appcompat         : "androidx.appcompat:appcompat:$appcompat_version",
+            constraintLayout  : "androidx.constraintlayout:constraintlayout:$constraintLayout_version",
+            navigationUi      : "androidx.navigation:navigation-ui-ktx:$nav_version",
+            navigationFragment: "androidx.navigation:navigation-fragment-ktx:$nav_version",
+            recyclerView      : "androidx.recyclerview:recyclerview:$recyclerView_version",
+            material          : "com.google.android.material:material:$material_version",
+            fragmentx         : "androidx.fragment:fragment-ktx:$fragmentx_version",
+            lifecycleViewmodel: "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version",
+            lifecycleLivedata : "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version",
+            lifecycleRuntime  : "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    ]
+
+    network = [
+            okhttpInterceptor: "com.squareup.okhttp3:logging-interceptor:$okhttp_version",
+            retrofit         : "com.squareup.retrofit2:retrofit:$retrofit_version",
+            retrofitConverter: "com.squareup.retrofit2:converter-moshi:$retrofit_version",
+            moshi            : "com.squareup.moshi:moshi-kotlin:$moshi_version",
+            moshiCodegen     : "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
+    ]
+    libs = [
+            daggerHilt         : "com.google.dagger:hilt-android:$hilt_version",
+            daggerHiltCompiler : "com.google.dagger:hilt-compiler:$hilt_version",
+            lottie             : "com.airbnb.android:lottie:$lottie_version",
+            coil               : "io.coil-kt:coil:$coil_version",
+            coilSvg            : "io.coil-kt:coil-svg:$coil_version",
+            circleIndicator    : "me.relex:circleindicator:$circle_indicator",
+            whyNotImageCarousel: "org.imaginativeworld.whynotimagecarousel:whynotimagecarousel:$why_not_image_carousel"
+    ]
+
+
+    test = [
+            coroutinesTest    : "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlin_coroutine_version",
+            junit             : "junit:junit:$junit_version",
+            mockk             : "io.mockk:mockk:$mockk_version",
+            daggerHiltCompiler: "com.google.dagger:hilt-android-compiler:$hilt_version",
+            daggerHiltTesting : "com.google.dagger:hilt-android-testing:$hilt_version",
+            kluent            : "org.amshove.kluent:kluent:$kluent_version",
+            archCore          : "androidx.arch.core:core-testing:$archCore",
+            turbine           : "app.cash.turbine:turbine:$turbine"
+    ]
+
+    testAndroid = [
+            robolectric : "androidx.test:core:$robolectric_version",
+            testRunner  : "androidx.test:runner:$testRunner_version",
+            espresso    : "androidx.test.espresso:espresso-contrib:$espresso_version",
+            espressoCore: "androidx.test.espresso:espresso-core:$espresso_version",
+            rules       : "androidx.test:rules:$rules_version",
+            extJunit    : "androidx.test.ext:junit-ktx:$junitKtx_version",
+    ]
+
+}

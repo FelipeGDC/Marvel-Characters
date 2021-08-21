@@ -1,15 +1,16 @@
 package com.fgdc.marvelcharacters.ui.charactersList.viewmodel
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fgdc.marvelcharacters.domain.model.CharacterListDomain
 import com.fgdc.marvelcharacters.domain.usecases.GetAllCharacters
-import com.fgdc.marvelcharacters.ui.base.BaseViewModel
 import com.fgdc.marvelcharacters.ui.charactersList.models.CharacterListView
 import com.fgdc.marvelcharacters.utils.functional.BadRequest
 import com.fgdc.marvelcharacters.utils.functional.Error
 import com.fgdc.marvelcharacters.utils.functional.ErrorNoConnection
 import com.fgdc.marvelcharacters.utils.functional.Success
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
@@ -18,8 +19,9 @@ import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
+@HiltViewModel
 class CharactersListViewModel @Inject constructor(val getAllCharacters: GetAllCharacters) :
-    BaseViewModel() {
+    ViewModel() {
 
     companion object {
         private const val MAX_OFFSET = 20
@@ -34,16 +36,13 @@ class CharactersListViewModel @Inject constructor(val getAllCharacters: GetAllCh
     fun getAllCharacters() {
         viewModelScope.launch {
             getAllCharacters(GetAllCharacters.Params(lastPageCount))
-                .onStart { handleShowSpinner(true) }
-                .onEach { handleShowSpinner(false) }
-                .catch { failure -> handleFailure(failure) }.collect { result ->
+                .onStart {  }
+                .onEach {  }
+                .catch { failure ->  }.collect { result ->
                     when (result) {
                         is Success<List<CharacterListDomain>> -> handleSuccessGetAllCharacters(
                             result.data
                         )
-                        is Error -> handleFailure(result.exception)
-                        is ErrorNoConnection -> handleFailure(result.exception)
-                        is BadRequest -> handleBadRequest(result.exception)
                     }
                 }
         }
@@ -53,15 +52,12 @@ class CharactersListViewModel @Inject constructor(val getAllCharacters: GetAllCh
         lastPageCount += MAX_OFFSET
         viewModelScope.launch {
             getAllCharacters(GetAllCharacters.Params(lastPageCount))
-                .catch { failure -> handleFailure(failure) }
+                .catch { failure -> }
                 .collect { result ->
                     when (result) {
                         is Success<List<CharacterListDomain>> -> handleSuccessGetMoreCharacters(
                             result.data
                         )
-                        is Error -> handleFailure(result.exception)
-                        is ErrorNoConnection -> handleFailure(result.exception)
-                        is BadRequest -> handleBadRequest(result.exception)
                     }
                 }
         }

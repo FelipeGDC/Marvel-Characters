@@ -2,16 +2,16 @@ package com.fgdc.marvelcharacters.ui
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import com.fgdc.marvelcharacters.R
 import com.fgdc.marvelcharacters.databinding.ActivityMainBinding
-import com.fgdc.marvelcharacters.di.component.ViewComponent
-import com.fgdc.marvelcharacters.ui.base.BaseActivity
+import dagger.hilt.android.AndroidEntryPoint
 
-class MainActivity : BaseActivity() {
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity() {
 
-    override fun initializeInjector(viewComponent: ViewComponent) = viewComponent.inject(this)
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
 

@@ -4,29 +4,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.fgdc.marvelcharacters.R
 import com.fgdc.marvelcharacters.databinding.FragmentCharacterDetailBinding
-import com.fgdc.marvelcharacters.di.component.ViewComponent
-import com.fgdc.marvelcharacters.ui.base.BaseFragment
 import com.fgdc.marvelcharacters.ui.characterDetail.adapters.ComicsListAdapter
 import com.fgdc.marvelcharacters.ui.characterDetail.adapters.SeriesListAdapter
 import com.fgdc.marvelcharacters.ui.characterDetail.models.CharacterDetailView
 import com.fgdc.marvelcharacters.ui.characterDetail.models.ComicListView
 import com.fgdc.marvelcharacters.ui.characterDetail.models.SeriesListView
 import com.fgdc.marvelcharacters.ui.characterDetail.viewmodel.CharacterDetailViewModel
-import com.fgdc.marvelcharacters.utils.extensions.failure
 import com.fgdc.marvelcharacters.utils.extensions.observe
 import com.fgdc.marvelcharacters.utils.extensions.showInfoAlertDialog
 import com.fgdc.marvelcharacters.utils.extensions.simpleLoad
-import javax.inject.Inject
 
-class CharacterDetailFragment : BaseFragment() {
+class CharacterDetailFragment : Fragment() {
 
-    @Inject
-    lateinit var characterDetailViewModel: CharacterDetailViewModel
-    override fun initializeInjector(viewComponent: ViewComponent) = viewComponent.inject(this)
+    private val characterDetailViewModel: CharacterDetailViewModel by viewModels()
 
     private lateinit var binding: FragmentCharacterDetailBinding
     private val args: CharacterDetailFragmentArgs by navArgs()
@@ -36,9 +32,6 @@ class CharacterDetailFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         with(characterDetailViewModel) {
-            observe(showSpinner, ::showSpinner)
-            failure(failure, ::handleFailure)
-            failure(badRequest, ::handleBadRequest)
             observe(characterDetailResponse, ::setCharacterDetail)
             observe(comicsListResponse, ::setComicsCarousel)
             observe(seriesListResponse, ::setSeriesCarousel)
