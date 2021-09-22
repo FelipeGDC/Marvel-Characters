@@ -9,7 +9,6 @@ import com.fgdc.marvelcharacters.data.repositories.SeriesRepositoryImpl
 import com.fgdc.marvelcharacters.domain.repository.CharactersRepository
 import com.fgdc.marvelcharacters.domain.repository.ComicsRepository
 import com.fgdc.marvelcharacters.domain.repository.SeriesRepository
-import com.fgdc.marvelcharacters.utils.helpers.NetworkHandler
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,19 +20,16 @@ class DataModule {
 
     @Provides
     fun provideCharactersRepository(
-        charactersRemoteDataSource: CharactersRemoteDataSource,
-        networkHandler: NetworkHandler
-    ): CharactersRepository = CharactersRepositoryImpl(charactersRemoteDataSource, networkHandler)
+        charactersRemoteDataSource: CharactersRemoteDataSource
+    ): CharactersRepository = CharactersRepositoryImpl(charactersRemoteDataSource)
 
     @Provides
     fun provideComicsRepository(
-        comicsRemoteDataSource: ComicsRemoteDataSource,
-        networkHandler: NetworkHandler
-    ): ComicsRepository = ComicsRepositoryImpl(comicsRemoteDataSource, networkHandler)
+        comicsRemoteDataSource: ComicsRemoteDataSource
+    ): ComicsRepository = ComicsRepositoryImpl(comicsRemoteDataSource)
 
     @Provides
     fun provideSeriesRepository(
-        seriesRemoteDataSource: SeriesRemoteDataSource,
-        networkHandler: NetworkHandler
-    ): SeriesRepository = SeriesRepositoryImpl(seriesRemoteDataSource, networkHandler)
+        seriesRemoteDataSource: SeriesRemoteDataSource
+    ): SeriesRepository = SeriesRepositoryImpl(seriesRemoteDataSource)
 }

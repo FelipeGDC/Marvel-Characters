@@ -6,10 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.fgdc.marvelcharacters.domain.model.CharacterListDomain
 import com.fgdc.marvelcharacters.domain.usecases.GetAllCharacters
 import com.fgdc.marvelcharacters.ui.charactersList.models.CharacterListView
-import com.fgdc.marvelcharacters.utils.functional.BadRequest
-import com.fgdc.marvelcharacters.utils.functional.Error
-import com.fgdc.marvelcharacters.utils.functional.ErrorNoConnection
-import com.fgdc.marvelcharacters.utils.functional.Success
+import com.fgdc.marvelcharacters.utils.functional.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
@@ -42,12 +39,12 @@ class CharactersListViewModel @Inject constructor(val getAllCharacters: GetAllCh
                 .catch { error -> failure.value = error }
                 .collect { result ->
                     when (result) {
-                        is Success<List<CharacterListDomain>> -> handleSuccessGetAllCharacters(
+                        is State.Success<List<CharacterListDomain>> -> handleSuccessGetAllCharacters(
                             result.data
                         )
-                        is BadRequest -> failure.value = result.exception
-                        is Error -> failure.value = result.exception
-                        is ErrorNoConnection -> failure.value = result.exception
+                        is State.BadRequest -> failure.value = result.exception
+                        is State.Error -> failure.value = result.exception
+                        is State.ErrorNoConnection -> failure.value = result.exception
                     }
                 }
         }
@@ -60,12 +57,12 @@ class CharactersListViewModel @Inject constructor(val getAllCharacters: GetAllCh
                 .catch { error -> failure.value = error }
                 .collect { result ->
                     when (result) {
-                        is Success<List<CharacterListDomain>> -> handleSuccessGetMoreCharacters(
+                        is State.Success<List<CharacterListDomain>> -> handleSuccessGetMoreCharacters(
                             result.data
                         )
-                        is BadRequest -> failure.value = result.exception
-                        is Error -> failure.value = result.exception
-                        is ErrorNoConnection -> failure.value = result.exception
+                        is State.BadRequest -> failure.value = result.exception
+                        is State.Error -> failure.value = result.exception
+                        is State.ErrorNoConnection -> failure.value = result.exception
                     }
                 }
         }

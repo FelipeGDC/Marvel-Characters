@@ -2,122 +2,90 @@ package com.fgdc.marvelcharacters.characters.viewmodels
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.fgdc.marvelcharacters.data.repositories.CharactersRepositoryImpl
-import com.fgdc.marvelcharacters.domain.model.CharacterListDomain
 import com.fgdc.marvelcharacters.domain.usecases.GetAllCharacters
 import com.fgdc.marvelcharacters.ui.charactersList.models.CharacterListView
 import com.fgdc.marvelcharacters.ui.charactersList.viewmodel.CharactersListViewModel
-import com.fgdc.marvelcharacters.utils.CoroutineTestRule
-import com.fgdc.marvelcharacters.utils.functional.Error
-import com.fgdc.marvelcharacters.utils.functional.Success
+import com.fgdc.marvelcharacters.utils.functional.State
 import com.fgdc.marvelcharacters.utils.mockCharacters
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.consumeAsFlow
-import kotlinx.coroutines.launch
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.impl.annotations.MockK
+import io.mockk.verify
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.setMain
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.io.IOException
 
+@ExperimentalCoroutinesApi
 class CharactersListViewModelTest {
 
     private lateinit var viewModel: CharactersListViewModel
-    private lateinit var getAllCharacters: GetAllCharacters
+    private val testDispatcher = TestCoroutineDispatcher()
 
-    private var repository = mock<CharactersRepositoryImpl>()
-    private val charactersObserver = mock<Observer<List<CharacterListView>>>()
-    private val moreCharactersObserver = mock<Observer<List<CharacterListView>>>()
-    private val isErrorObserver = mock<Observer<Throwable>>()
-    private var initialOffset = 0
+    @get:Rule
+    val instantExecutorRule = InstantTaskExecutorRule()
+
+    @MockK
+    lateinit var getAllCharacters: GetAllCharacters
+
+    @MockK
+    lateinit var charactersObserver: Observer<List<CharacterListView>>
+
+    @MockK
+    lateinit var moreCharactersObserver: Observer<List<CharacterListView>>
+
     private var maxOffset = 20
-
-    @get:Rule
-    var coroutinesRule = CoroutineTestRule()
-
-    @get:Rule
-    var instantExecutorRule = InstantTaskExecutorRule()
 
     @Before
     fun setup() {
-        getAllCharacters = GetAllCharacters(repository)
+        MockKAnnotations.init(this, relaxUnitFun = true)
+        Dispatchers.setMain(testDispatcher)
         viewModel = CharactersListViewModel(getAllCharacters).apply {
             charactersResponse.observeForever(charactersObserver)
             moreCharactersResponse.observeForever(moreCharactersObserver)
-            failure.observeForever(isErrorObserver)
+        }
+    }
+
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain()
+        testDispatcher.cleanupTestCoroutines()
+    }
+
+    @Test
+    fun `should emit get characters on success`() = runBlockingTest {
+        val expectedCharacters =
+            mockCharacters(maxOffset).map { it.toCharacterListDomain() }
+        val flowCharacter = flowOf(State.Success(expectedCharacters))
+
+        coEvery { getAllCharacters.invoke(any()) } returns flowCharacter
+
+        viewModel.getAllCharacters()
+
+        verify {
+            charactersObserver.onChanged(expectedCharacters.map { it.toCharacterView() })
         }
     }
 
     @Test
-    fun `should emit get characters on success`() =
-        coroutinesRule.dispatcher.runBlockingTest {
-            val expectedCharacters = Success(mockCharacters(maxOffset).map { it.toCharacterListDomain() })
+    fun `should emit get more characters on success`() = runBlockingTest {
+        val expectedCharacters =
+            mockCharacters(maxOffset).map { it.toCharacterListDomain() }
+        val flowCharacter = flowOf(State.Success(expectedCharacters))
 
-            val channel = Channel<Success<List<CharacterListDomain>>>()
-            val flow = channel.consumeAsFlow()
+        coEvery { getAllCharacters.invoke(any()) } returns flowCharacter
 
-            doReturn(flow)
-                .whenever(repository)
-                .getAllCharacters(initialOffset)
+        viewModel.charactersListScrolled()
 
-            launch {
-                channel.send(expectedCharacters)
-                channel.close(IOException())
-            }
-
-            viewModel.getAllCharacters()
-
-            verify(charactersObserver).onChanged(expectedCharacters.data.map { it.toCharacterView() })
+        verify {
+            moreCharactersObserver.onChanged(expectedCharacters.map { it.toCharacterView() })
         }
-
-    @Test
-    fun `should emit get more characters on success`() =
-        coroutinesRule.dispatcher.runBlockingTest {
-            val expectedCharacters = Success(mockCharacters(maxOffset).map { it.toCharacterListDomain() })
-
-            val channel = Channel<Success<List<CharacterListDomain>>>()
-            val flow = channel.consumeAsFlow()
-
-            doReturn(flow)
-                .whenever(repository)
-                .getAllCharacters(maxOffset)
-
-            launch {
-                channel.send(expectedCharacters)
-                channel.close(IOException())
-            }
-
-            viewModel.charactersListScrolled()
-
-            verify(moreCharactersObserver).onChanged(expectedCharacters.data.map { it.toCharacterView() })
-        }
-
-    @Test
-    fun `should emit error on get characters lookup failure`() =
-        coroutinesRule.dispatcher.runBlockingTest {
-
-            val expectedCharacters = Success(mockCharacters(maxOffset).map { it.toCharacterListDomain() })
-            val expectedError = Error(Throwable())
-
-            val channel = Channel<Success<List<CharacterListDomain>>>()
-            val flow = channel.consumeAsFlow()
-
-            doReturn(flow)
-                .whenever(repository)
-                .getAllCharacters(initialOffset)
-
-            launch {
-                channel.send(expectedCharacters)
-                channel.close(expectedError.exception)
-            }
-
-            viewModel.getAllCharacters()
-
-            verify(charactersObserver).onChanged(expectedCharacters.data.map { it.toCharacterView() })
-            verify(isErrorObserver).onChanged(expectedError.exception)
-        }
+    }
 }

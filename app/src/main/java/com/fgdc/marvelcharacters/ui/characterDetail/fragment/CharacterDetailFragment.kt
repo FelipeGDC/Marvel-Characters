@@ -133,7 +133,6 @@ class CharacterDetailFragment : Fragment() {
                         findNavController().navigateUp()
                     }
                 }.show()
-
             }
         }
     }

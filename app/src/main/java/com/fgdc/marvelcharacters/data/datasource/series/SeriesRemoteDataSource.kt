@@ -1,9 +1,8 @@
 package com.fgdc.marvelcharacters.data.datasource.series
 
-import com.fgdc.marvelcharacters.data.datasource.core.entity.ApiResponse
-import com.fgdc.marvelcharacters.data.datasource.core.SeriesMarvel
-import retrofit2.Response
+import com.fgdc.marvelcharacters.domain.model.SeriesListDomain
+import com.fgdc.marvelcharacters.utils.functional.State
 
 interface SeriesRemoteDataSource {
-    suspend fun getSeriesById(seriesId: Int): Response<ApiResponse<SeriesMarvel>>
+    suspend fun getSeriesById(seriesId: Int): State<List<SeriesListDomain>>
 }

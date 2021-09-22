@@ -109,4 +109,5 @@ dependencies {
     testImplementation testAndroid.espresso
     testImplementation testAndroid.robolectric
     androidTestImplementation testAndroid.extJunit
+    androidTestImplementation test.coroutinesTest
 }

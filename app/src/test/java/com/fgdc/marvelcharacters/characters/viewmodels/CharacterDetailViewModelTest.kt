@@ -2,12 +2,6 @@ package com.fgdc.marvelcharacters.characters.viewmodels
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.fgdc.marvelcharacters.data.repositories.CharactersRepositoryImpl
-import com.fgdc.marvelcharacters.data.repositories.ComicsRepositoryImpl
-import com.fgdc.marvelcharacters.data.repositories.SeriesRepositoryImpl
-import com.fgdc.marvelcharacters.domain.model.CharacterDetailDomain
-import com.fgdc.marvelcharacters.domain.model.ComicListDomain
-import com.fgdc.marvelcharacters.domain.model.SeriesListDomain
 import com.fgdc.marvelcharacters.domain.usecases.GetCharacterById
 import com.fgdc.marvelcharacters.domain.usecases.GetComicById
 import com.fgdc.marvelcharacters.domain.usecases.GetSeriesById
@@ -15,158 +9,94 @@ import com.fgdc.marvelcharacters.ui.characterDetail.models.CharacterDetailView
 import com.fgdc.marvelcharacters.ui.characterDetail.models.ComicListView
 import com.fgdc.marvelcharacters.ui.characterDetail.models.SeriesListView
 import com.fgdc.marvelcharacters.ui.characterDetail.viewmodel.CharacterDetailViewModel
-import com.fgdc.marvelcharacters.utils.CoroutineTestRule
-import com.fgdc.marvelcharacters.utils.functional.Error
-import com.fgdc.marvelcharacters.utils.functional.Success
+import com.fgdc.marvelcharacters.utils.functional.State
 import com.fgdc.marvelcharacters.utils.mockCharacters
 import com.fgdc.marvelcharacters.utils.mockComics
 import com.fgdc.marvelcharacters.utils.mockSeries
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.consumeAsFlow
-import kotlinx.coroutines.launch
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.impl.annotations.MockK
+import io.mockk.verifyOrder
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.setMain
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.io.IOException
 
+@ExperimentalCoroutinesApi
 class CharacterDetailViewModelTest {
 
     private lateinit var viewModel: CharacterDetailViewModel
-    private lateinit var getCharacter: GetCharacterById
-    private lateinit var getComic: GetComicById
-    private lateinit var getSeries: GetSeriesById
-
-    private var charactersRepository = mock<CharactersRepositoryImpl>()
-    private var comicsRepository = mock<ComicsRepositoryImpl>()
-    private var seriesRepository = mock<SeriesRepositoryImpl>()
-
-    private val characterObserver = mock<Observer<CharacterDetailView>>()
-    private val comicsObserver = mock<Observer<List<ComicListView>>>()
-    private val seriesObserver = mock<Observer<List<SeriesListView>>>()
-    private val isErrorObserver = mock<Observer<Throwable>>()
+    private val testDispatcher = TestCoroutineDispatcher()
 
     @get:Rule
-    var coroutinesRule = CoroutineTestRule()
+    val instantExecutorRule = InstantTaskExecutorRule()
 
-    @get:Rule
-    var instantExecutorRule = InstantTaskExecutorRule()
+    @MockK
+    lateinit var getCharacter: GetCharacterById
+
+    @MockK
+    lateinit var getComics: GetComicById
+
+    @MockK
+    lateinit var getSeries: GetSeriesById
+
+    @MockK
+    lateinit var characterObserver: Observer<CharacterDetailView>
+
+    @MockK
+    lateinit var comicsObserver: Observer<List<ComicListView>>
+
+    @MockK
+    lateinit var seriesObserver: Observer<List<SeriesListView>>
+
+    private val characterId = 0
+    private val expectedCharacters = mockCharacters(1).map { it.toCharacterDetailDomain() }
+    private val flowCharacters = flowOf(State.Success(expectedCharacters))
+
+    private val expectedSeries = mockSeries(1).map { it.toSeriesListDomain() }
+    private val flowSeries = flowOf(State.Success(expectedSeries))
+
+    private val expectedComic = mockComics(1).map { it.toComicListDomain() }
+    private val flowComic = flowOf(State.Success(expectedComic))
 
     @Before
-    fun setup() {
-        getCharacter = GetCharacterById(charactersRepository)
-        getComic = GetComicById(comicsRepository)
-        getSeries = GetSeriesById(seriesRepository)
-        viewModel = CharacterDetailViewModel(getCharacter, getComic, getSeries).apply {
+    fun setUp() {
+        MockKAnnotations.init(this, relaxUnitFun = true)
+        Dispatchers.setMain(testDispatcher)
+        coEvery { getComics.invoke(any()) } returns flowComic
+        coEvery { getSeries.invoke(any()) } returns flowSeries
+        coEvery { getCharacter.invoke(any()) } returns flowCharacters
+        viewModel = CharacterDetailViewModel(getCharacter, getComics, getSeries).apply {
             characterDetailResponse.observeForever(characterObserver)
             comicsListResponse.observeForever(comicsObserver)
             seriesListResponse.observeForever(seriesObserver)
-            failure.observeForever(isErrorObserver)
         }
     }
 
-    @Test
-    fun `should emit get character by id on success`() =
-        coroutinesRule.dispatcher.runBlockingTest {
-            val characterId = 0
-            val expectedCharacters =
-                Success(mockCharacters(1).map { it.toCharacterDetailDomain() })
-
-            val channel = Channel<Success<List<CharacterDetailDomain>>>()
-            val flow = channel.consumeAsFlow()
-
-            doReturn(flow)
-                .whenever(charactersRepository)
-                .getCharacterById(characterId)
-
-            launch {
-                channel.send(expectedCharacters)
-                channel.close(IOException())
-            }
-
-            viewModel.getCharacterById(characterId)
-
-            verify(characterObserver).onChanged(expectedCharacters.data.map { it.toCharacterDetailView() }[0])
-        }
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain()
+        testDispatcher.cleanupTestCoroutines()
+    }
 
     @Test
-    fun `should emit error on character by id lookup failure`() =
-        coroutinesRule.dispatcher.runBlockingTest {
+    fun `should emit get character, get series and get comic by id on success`() = runBlockingTest {
+        viewModel.getCharacterById(characterId)
 
-            val characterId = 0
-            val expectedCharacters =
-                Success(mockCharacters(1).map { it.toCharacterDetailDomain() })
-            val expectedError = Error(Throwable())
+        val characters = expectedCharacters.map { it.toCharacterDetailView() }[0]
+        characters.comics.addAll(expectedComic.map { it.toComicListView() }.toMutableList())
 
-            val channel = Channel<Success<List<CharacterDetailDomain>>>()
-            val flow = channel.consumeAsFlow()
-
-            doReturn(flow)
-                .whenever(charactersRepository)
-                .getCharacterById(characterId)
-
-            launch {
-                channel.send(expectedCharacters)
-                channel.close(expectedError.exception)
-            }
-
-            viewModel.getCharacterById(characterId)
-
-            verify(characterObserver).onChanged(expectedCharacters.data.map { it.toCharacterDetailView() }[0])
-            verify(isErrorObserver).onChanged(expectedError.exception)
+        verifyOrder {
+            comicsObserver.onChanged(expectedComic.map { it.toComicListView() })
+            seriesObserver.onChanged(expectedSeries.map { it.toSeriesListView() })
+            characterObserver.onChanged(characters)
         }
-
-    @Test
-    fun `should emit get comic by id on success`() =
-        coroutinesRule.dispatcher.runBlockingTest {
-            val comicId = 0
-
-            val expectedComic =
-                Success(mockComics(1).map { it.toComicListDomain() })
-
-            val channel = Channel<Success<List<ComicListDomain>>>()
-            val flow = channel.consumeAsFlow()
-
-            doReturn(flow)
-                .whenever(comicsRepository)
-                .getComicById(comicId)
-
-            launch {
-                channel.send(expectedComic)
-                channel.close(IOException())
-            }
-
-            viewModel.getComicById(comicId)
-
-            verify(comicsObserver).onChanged(expectedComic.data.map { it.toComicListView() })
-        }
-
-    @Test
-    fun `should emit get series by id on success`() =
-        coroutinesRule.dispatcher.runBlockingTest {
-            val seriesId = 0
-
-            val expectedSeries =
-                Success(mockSeries(1).map { it.toSeriesListDomain() })
-
-            val channel = Channel<Success<List<SeriesListDomain>>>()
-            val flow = channel.consumeAsFlow()
-
-            doReturn(flow)
-                .whenever(seriesRepository)
-                .getSeriesById(seriesId)
-
-            launch {
-                channel.send(expectedSeries)
-                channel.close(IOException())
-            }
-
-            viewModel.getSeriesById(seriesId)
-
-            verify(seriesObserver).onChanged(expectedSeries.data.map { it.toSeriesListView() })
-        }
+    }
 }

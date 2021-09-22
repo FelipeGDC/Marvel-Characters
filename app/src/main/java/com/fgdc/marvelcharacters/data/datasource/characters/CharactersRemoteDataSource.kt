@@ -1,10 +1,10 @@
 package com.fgdc.marvelcharacters.data.datasource.characters
 
-import com.fgdc.marvelcharacters.data.datasource.core.entity.ApiResponse
-import com.fgdc.marvelcharacters.data.datasource.core.CharacterMarvel
-import retrofit2.Response
+import com.fgdc.marvelcharacters.domain.model.CharacterDetailDomain
+import com.fgdc.marvelcharacters.domain.model.CharacterListDomain
+import com.fgdc.marvelcharacters.utils.functional.State
 
 interface CharactersRemoteDataSource {
-    suspend fun getAllCharacters(offset: Int): Response<ApiResponse<CharacterMarvel>>
-    suspend fun getCharacterById(characterId: Int): Response<ApiResponse<CharacterMarvel>>
+    suspend fun getAllCharacters(offset: Int): State<List<CharacterListDomain>>
+    suspend fun getCharacterById(characterId: Int): State<List<CharacterDetailDomain>>
 }

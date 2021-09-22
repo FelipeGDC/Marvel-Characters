@@ -3,7 +3,6 @@ package com.fgdc.marvelcharacters.utils.helpers
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
@@ -24,5 +23,4 @@ class NetworkHandler @Inject constructor(@ApplicationContext private val context
         }
         return connection
     }
-
 }

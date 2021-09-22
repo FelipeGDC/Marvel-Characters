@@ -88,5 +88,4 @@ class NetworkModule {
             .baseUrl(BuildConfig.MARVEL_API_BASE_URL)
             .build()
     }
-
 }

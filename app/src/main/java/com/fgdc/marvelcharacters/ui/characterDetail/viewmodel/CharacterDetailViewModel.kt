@@ -12,7 +12,7 @@ import com.fgdc.marvelcharacters.domain.usecases.GetSeriesById
 import com.fgdc.marvelcharacters.ui.characterDetail.models.CharacterDetailView
 import com.fgdc.marvelcharacters.ui.characterDetail.models.ComicListView
 import com.fgdc.marvelcharacters.ui.characterDetail.models.SeriesListView
-import com.fgdc.marvelcharacters.utils.functional.Success
+import com.fgdc.marvelcharacters.utils.functional.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
@@ -47,7 +47,7 @@ class CharacterDetailViewModel @Inject constructor(
                 .catch { error -> failure.value = error }
                 .collect { result ->
                     when (result) {
-                        is Success<List<CharacterDetailDomain>> -> handleSuccessGetCharacter(result.data)
+                        is State.Success<List<CharacterDetailDomain>> -> handleSuccessGetCharacter(result.data)
                     }
                 }
         }
@@ -68,7 +68,7 @@ class CharacterDetailViewModel @Inject constructor(
         }
     }
 
-    fun getComicById(comicId: Int) {
+    private fun getComicById(comicId: Int) {
         viewModelScope.launch {
             getComic(GetComicById.Params(comicId))
                 .onStart { showSpinner.value = true }
@@ -76,7 +76,7 @@ class CharacterDetailViewModel @Inject constructor(
                 .catch { error -> failure.value = error }
                 .collect { result ->
                     when (result) {
-                        is Success<List<ComicListDomain>> -> {
+                        is State.Success<List<ComicListDomain>> -> {
                             comicLists.addAll(result.data.map { it.toComicListView() })
                             comicsListResponse.postValue(comicLists)
                         }
@@ -85,7 +85,7 @@ class CharacterDetailViewModel @Inject constructor(
         }
     }
 
-    fun getSeriesById(seriesId: Int) {
+    private fun getSeriesById(seriesId: Int) {
         viewModelScope.launch {
             getSeries(GetSeriesById.Params(seriesId))
                 .onStart { showSpinner.value = true }
@@ -93,7 +93,7 @@ class CharacterDetailViewModel @Inject constructor(
                 .catch { error -> failure.value = error }
                 .collect { result ->
                     when (result) {
-                        is Success<List<SeriesListDomain>> -> {
+                        is State.Success<List<SeriesListDomain>> -> {
                             seriesLists.addAll(result.data.map { it.toSeriesListView() })
                             seriesListResponse.postValue(seriesLists)
                         }

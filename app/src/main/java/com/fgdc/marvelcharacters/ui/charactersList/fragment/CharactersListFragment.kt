@@ -52,7 +52,7 @@ class CharactersListFragment : Fragment() {
         }
     }
 
-    private fun setObservers(){
+    private fun setObservers() {
         with(charactersListViewModel) {
             failure(failure, ::handleFailure)
             observe(showSpinner, ::showSpinner)
