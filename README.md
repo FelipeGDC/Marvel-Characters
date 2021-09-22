@@ -52,7 +52,7 @@ Currently the app all sits in one single module App.
 
 ## Testing 🧰
 
-#### (There should totally be more tests, but because of the type of project, I haven't tested every part of the application. I decided to test the repositories and two use-cases since I felt it was representative enough. At least for the time being.)
+#### (There should totally be more tests, but because of the type of project, I haven't tested every part of the application. I decided to test the basic functionalities in the repositories, two useCases and the two viewModels since I felt it was representative enough. At least for the time being.)
 
 - [Mockk](https://mockk.io/)
 - [Kluent](https://markusamshove.github.io/Kluent/)
