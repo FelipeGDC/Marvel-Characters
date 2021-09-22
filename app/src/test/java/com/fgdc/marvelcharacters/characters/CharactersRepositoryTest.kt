@@ -1,6 +1,6 @@
 package com.fgdc.marvelcharacters.characters
 
-import com.fgdc.marvelcharacters.data.datasource.remote.services.CharactersService
+import com.fgdc.data.datasource.remote.services.CharactersService
 import com.fgdc.marvelcharacters.data.repositories.CharactersRepositoryImpl
 import com.fgdc.marvelcharacters.domain.model.CharacterDetailDomain
 import com.fgdc.marvelcharacters.domain.model.CharacterListDomain

@@ -10,16 +10,21 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.fgdc.marvelcharacters.R
 import com.fgdc.marvelcharacters.databinding.FragmentCharacterDetailBinding
+import com.fgdc.marvelcharacters.ui.MainActivity
 import com.fgdc.marvelcharacters.ui.characterDetail.adapters.ComicsListAdapter
 import com.fgdc.marvelcharacters.ui.characterDetail.adapters.SeriesListAdapter
 import com.fgdc.marvelcharacters.ui.characterDetail.models.CharacterDetailView
 import com.fgdc.marvelcharacters.ui.characterDetail.models.ComicListView
 import com.fgdc.marvelcharacters.ui.characterDetail.models.SeriesListView
 import com.fgdc.marvelcharacters.ui.characterDetail.viewmodel.CharacterDetailViewModel
+import com.fgdc.marvelcharacters.utils.exception.ErrorHandler
+import com.fgdc.marvelcharacters.utils.extensions.failure
 import com.fgdc.marvelcharacters.utils.extensions.observe
 import com.fgdc.marvelcharacters.utils.extensions.showInfoAlertDialog
 import com.fgdc.marvelcharacters.utils.extensions.simpleLoad
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CharacterDetailFragment : Fragment() {
 
     private val characterDetailViewModel: CharacterDetailViewModel by viewModels()
@@ -28,15 +33,6 @@ class CharacterDetailFragment : Fragment() {
     private val args: CharacterDetailFragmentArgs by navArgs()
     private val comicsAdapter = ComicsListAdapter()
     private val seriesAdapter = SeriesListAdapter()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        with(characterDetailViewModel) {
-            observe(characterDetailResponse, ::setCharacterDetail)
-            observe(comicsListResponse, ::setComicsCarousel)
-            observe(seriesListResponse, ::setSeriesCarousel)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,10 +45,22 @@ class CharacterDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setObservers()
         characterDetailViewModel.getCharacterById(args.characterId)
         binding.apply {
             rvComics.adapter = comicsAdapter
             rvSeries.adapter = seriesAdapter
+            backButton.setOnClickListener { findNavController().navigateUp() }
+        }
+    }
+
+    private fun setObservers() {
+        with(characterDetailViewModel) {
+            failure(failure, ::handleFailure)
+            observe(showSpinner, ::showSpinner)
+            observe(characterDetailResponse, ::setCharacterDetail)
+            observe(comicsListResponse, ::setComicsCarousel)
+            observe(seriesListResponse, ::setSeriesCarousel)
         }
     }
 
@@ -107,22 +115,40 @@ class CharacterDetailFragment : Fragment() {
     }
 
     private fun handleFailure(failure: Throwable?) {
-        showInfoAlertDialog {
-            setTitle(getString(R.string.error_title))
-            setText(failure?.message ?: getString(R.string.common_error))
-            btnAccept {
-                findNavController().navigateUp()
+        when (failure?.message) {
+            ErrorHandler.NETWORK_ERROR_MESSAGE, ErrorHandler.UNKNOWN_ERROR -> {
+                showInfoAlertDialog {
+                    setTitle(getString(R.string.error_title))
+                    setText(failure.message ?: getString(R.string.common_error))
+                    btnAccept {
+                        findNavController().navigateUp()
+                    }
+                }.show()
             }
-        }.show()
+            ErrorHandler.BAD_REQUEST -> {
+                showInfoAlertDialog {
+                    setTitle(getString(R.string.bad_request))
+                    setText(failure.message ?: getString(R.string.common_error))
+                    btnAccept {
+                        findNavController().navigateUp()
+                    }
+                }.show()
+
+            }
+        }
     }
 
-    private fun handleBadRequest(failure: Throwable?) {
-        showInfoAlertDialog {
-            setTitle(getString(R.string.bad_request))
-            setText(failure?.message ?: getString(R.string.common_error))
-            btnAccept {
-                findNavController().navigateUp()
-            }
-        }.show()
+    private fun showSpinner(show: Boolean?) {
+        when (show) {
+            true -> progressStatus(View.VISIBLE)
+            false -> progressStatus(View.GONE)
+        }
     }
+
+    private fun progressStatus(viewStatus: Int) =
+        with(activity) {
+            if (this is MainActivity) {
+                this.showProgressStatus(viewStatus)
+            }
+        }
 }

@@ -1,6 +1,6 @@
 package com.fgdc.marvelcharacters.domain.usecases
 
-import com.fgdc.marvelcharacters.data.repositories.SeriesRepository
+import com.fgdc.marvelcharacters.domain.repository.SeriesRepository
 import com.fgdc.marvelcharacters.domain.model.SeriesListDomain
 import com.fgdc.marvelcharacters.utils.functional.State
 import javax.inject.Inject

@@ -1,6 +1,6 @@
 package com.fgdc.marvelcharacters.comics
 
-import com.fgdc.marvelcharacters.data.datasource.remote.services.ComicsService
+import com.fgdc.data.datasource.remote.services.ComicsService
 import com.fgdc.marvelcharacters.data.repositories.ComicsRepositoryImpl
 import com.fgdc.marvelcharacters.domain.model.ComicListDomain
 import com.fgdc.marvelcharacters.utils.mockApiResponse

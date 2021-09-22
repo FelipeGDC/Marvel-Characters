@@ -8,14 +8,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.fgdc.marvelcharacters.R
 import com.fgdc.marvelcharacters.databinding.FragmentCharactersListBinding
+import com.fgdc.marvelcharacters.ui.MainActivity
 import com.fgdc.marvelcharacters.ui.charactersList.adapters.CharactersListAdapter
 import com.fgdc.marvelcharacters.ui.charactersList.models.CharacterListView
 import com.fgdc.marvelcharacters.ui.charactersList.viewmodel.CharactersListViewModel
 import com.fgdc.marvelcharacters.utils.exception.ErrorHandler
 import com.fgdc.marvelcharacters.utils.extensions.endless
+import com.fgdc.marvelcharacters.utils.extensions.failure
 import com.fgdc.marvelcharacters.utils.extensions.observe
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class CharactersListFragment : Fragment() {
@@ -27,10 +28,6 @@ class CharactersListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        with(charactersListViewModel) {
-            observe(charactersResponse, ::setListOfCharacters)
-            observe(moreCharactersResponse, ::addMoreCharacters)
-        }
         setHasOptionsMenu(true)
     }
 
@@ -45,12 +42,22 @@ class CharactersListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setObservers()
         binding.apply {
             rvCharacters.endless { charactersListViewModel.charactersListScrolled() }
             rvCharacters.adapter = adapter
             if (adapter.itemCount == 0) {
                 charactersListViewModel.getAllCharacters()
             }
+        }
+    }
+
+    private fun setObservers(){
+        with(charactersListViewModel) {
+            failure(failure, ::handleFailure)
+            observe(showSpinner, ::showSpinner)
+            observe(charactersResponse, ::setListOfCharacters)
+            observe(moreCharactersResponse, ::addMoreCharacters)
         }
     }
 
@@ -67,26 +74,41 @@ class CharactersListFragment : Fragment() {
     }
 
     private fun handleFailure(failure: Throwable?) {
-        if (failure?.message == ErrorHandler.NETWORK_ERROR_MESSAGE) {
-            binding.apply {
-                rvCharacters.visibility = View.GONE
-                emptyView.visibility = View.VISIBLE
-                errorMessage.text = failure.message ?: getString(R.string.common_error)
-                tryAgainBtn.setOnClickListener {
-                    charactersListViewModel.getAllCharacters()
+        when (failure?.message) {
+            ErrorHandler.NETWORK_ERROR_MESSAGE, ErrorHandler.UNKNOWN_ERROR -> {
+                binding.apply {
+                    rvCharacters.visibility = View.GONE
+                    emptyView.visibility = View.VISIBLE
+                    errorMessage.text = failure.message ?: getString(R.string.common_error)
+                    tryAgainBtn.setOnClickListener {
+                        charactersListViewModel.getAllCharacters()
+                    }
+                }
+            }
+            ErrorHandler.BAD_REQUEST -> {
+                binding.apply {
+                    rvCharacters.visibility = View.GONE
+                    emptyView.visibility = View.VISIBLE
+                    errorMessage.text = failure?.message ?: getString(R.string.common_error)
+                    tryAgainBtn.setOnClickListener {
+                        charactersListViewModel.getAllCharacters()
+                    }
                 }
             }
         }
     }
 
-    private fun handleBadRequest(failure: Throwable?) {
-        binding.apply {
-            rvCharacters.visibility = View.GONE
-            emptyView.visibility = View.VISIBLE
-            errorMessage.text = failure?.message ?: getString(R.string.common_error)
-            tryAgainBtn.setOnClickListener {
-                charactersListViewModel.getAllCharacters()
-            }
+    private fun showSpinner(show: Boolean?) {
+        when (show) {
+            true -> progressStatus(View.VISIBLE)
+            false -> progressStatus(View.GONE)
         }
     }
+
+    private fun progressStatus(viewStatus: Int) =
+        with(activity) {
+            if (this is MainActivity) {
+                this.showProgressStatus(viewStatus)
+            }
+        }
 }

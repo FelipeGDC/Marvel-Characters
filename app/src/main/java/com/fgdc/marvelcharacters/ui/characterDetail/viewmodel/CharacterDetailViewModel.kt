@@ -12,9 +12,6 @@ import com.fgdc.marvelcharacters.domain.usecases.GetSeriesById
 import com.fgdc.marvelcharacters.ui.characterDetail.models.CharacterDetailView
 import com.fgdc.marvelcharacters.ui.characterDetail.models.ComicListView
 import com.fgdc.marvelcharacters.ui.characterDetail.models.SeriesListView
-import com.fgdc.marvelcharacters.utils.functional.BadRequest
-import com.fgdc.marvelcharacters.utils.functional.Error
-import com.fgdc.marvelcharacters.utils.functional.ErrorNoConnection
 import com.fgdc.marvelcharacters.utils.functional.Success
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
@@ -32,18 +29,22 @@ class CharacterDetailViewModel @Inject constructor(
 ) : ViewModel() {
 
     lateinit var characterDetail: CharacterDetailView
+
+    var showSpinner: MutableLiveData<Boolean> = MutableLiveData()
+    var failure: MutableLiveData<Throwable> = MutableLiveData()
     var characterDetailResponse = MutableLiveData<CharacterDetailView>()
-    var comicLists: MutableList<ComicListView> = mutableListOf()
     var comicsListResponse = MutableLiveData<List<ComicListView>>()
-    var seriesLists: MutableList<SeriesListView> = mutableListOf()
     var seriesListResponse = MutableLiveData<List<SeriesListView>>()
+
+    private var comicLists: MutableList<ComicListView> = mutableListOf()
+    private var seriesLists: MutableList<SeriesListView> = mutableListOf()
 
     fun getCharacterById(characterId: Int) {
         viewModelScope.launch {
             getCharacter(GetCharacterById.Params(characterId))
-                .onStart {  }
-                .onEach {  }
-                .catch { failure ->  }
+                .onStart { showSpinner.value = true }
+                .onEach { showSpinner.value = false }
+                .catch { error -> failure.value = error }
                 .collect { result ->
                     when (result) {
                         is Success<List<CharacterDetailDomain>> -> handleSuccessGetCharacter(result.data)
@@ -70,9 +71,9 @@ class CharacterDetailViewModel @Inject constructor(
     fun getComicById(comicId: Int) {
         viewModelScope.launch {
             getComic(GetComicById.Params(comicId))
-                .onStart {  }
-                .onEach {  }
-                .catch { failure -> }
+                .onStart { showSpinner.value = true }
+                .onEach { showSpinner.value = false }
+                .catch { error -> failure.value = error }
                 .collect { result ->
                     when (result) {
                         is Success<List<ComicListDomain>> -> {
@@ -87,9 +88,9 @@ class CharacterDetailViewModel @Inject constructor(
     fun getSeriesById(seriesId: Int) {
         viewModelScope.launch {
             getSeries(GetSeriesById.Params(seriesId))
-                .onStart {  }
-                .onEach {  }
-                .catch { failure -> }
+                .onStart { showSpinner.value = true }
+                .onEach { showSpinner.value = false }
+                .catch { error -> failure.value = error }
                 .collect { result ->
                     when (result) {
                         is Success<List<SeriesListDomain>> -> {

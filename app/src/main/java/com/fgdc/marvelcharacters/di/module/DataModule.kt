@@ -1,9 +1,14 @@
 package com.fgdc.marvelcharacters.di.module
 
-import com.fgdc.marvelcharacters.data.datasource.remote.services.CharactersApi
-import com.fgdc.marvelcharacters.data.datasource.remote.services.ComicsApi
-import com.fgdc.marvelcharacters.data.datasource.remote.services.SeriesApi
-import com.fgdc.marvelcharacters.data.repositories.*
+import com.fgdc.marvelcharacters.data.datasource.characters.CharactersRemoteDataSource
+import com.fgdc.marvelcharacters.data.datasource.comics.ComicsRemoteDataSource
+import com.fgdc.marvelcharacters.data.datasource.series.SeriesRemoteDataSource
+import com.fgdc.marvelcharacters.data.repositories.CharactersRepositoryImpl
+import com.fgdc.marvelcharacters.data.repositories.ComicsRepositoryImpl
+import com.fgdc.marvelcharacters.data.repositories.SeriesRepositoryImpl
+import com.fgdc.marvelcharacters.domain.repository.CharactersRepository
+import com.fgdc.marvelcharacters.domain.repository.ComicsRepository
+import com.fgdc.marvelcharacters.domain.repository.SeriesRepository
 import com.fgdc.marvelcharacters.utils.helpers.NetworkHandler
 import dagger.Module
 import dagger.Provides
@@ -16,19 +21,19 @@ class DataModule {
 
     @Provides
     fun provideCharactersRepository(
-        characterApi: CharactersApi,
+        charactersRemoteDataSource: CharactersRemoteDataSource,
         networkHandler: NetworkHandler
-    ): CharactersRepository = CharactersRepositoryImpl(characterApi, networkHandler)
+    ): CharactersRepository = CharactersRepositoryImpl(charactersRemoteDataSource, networkHandler)
 
     @Provides
     fun provideComicsRepository(
-        comicsApi: ComicsApi,
+        comicsRemoteDataSource: ComicsRemoteDataSource,
         networkHandler: NetworkHandler
-    ): ComicsRepository = ComicsRepositoryImpl(comicsApi, networkHandler)
+    ): ComicsRepository = ComicsRepositoryImpl(comicsRemoteDataSource, networkHandler)
 
     @Provides
     fun provideSeriesRepository(
-        seriesApi: SeriesApi,
+        seriesRemoteDataSource: SeriesRemoteDataSource,
         networkHandler: NetworkHandler
-    ): SeriesRepository = SeriesRepositoryImpl(seriesApi, networkHandler)
+    ): SeriesRepository = SeriesRepositoryImpl(seriesRemoteDataSource, networkHandler)
 }

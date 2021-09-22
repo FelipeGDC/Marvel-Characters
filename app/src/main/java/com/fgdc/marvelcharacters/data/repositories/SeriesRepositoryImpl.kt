@@ -1,7 +1,8 @@
 package com.fgdc.marvelcharacters.data.repositories
 
-import com.fgdc.marvelcharacters.data.datasource.remote.services.SeriesApi
+import com.fgdc.marvelcharacters.data.datasource.series.SeriesRemoteDataSource
 import com.fgdc.marvelcharacters.domain.model.SeriesListDomain
+import com.fgdc.marvelcharacters.domain.repository.SeriesRepository
 import com.fgdc.marvelcharacters.utils.exception.ErrorHandler
 import com.fgdc.marvelcharacters.utils.functional.*
 import com.fgdc.marvelcharacters.utils.helpers.NetworkHandler
@@ -13,13 +14,13 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class SeriesRepositoryImpl @Inject constructor(
-    private val apiService: SeriesApi,
+    private val seriesRemoteDataSource: SeriesRemoteDataSource,
     private val networkHandler: NetworkHandler
 ) : SeriesRepository {
     override fun getSeriesById(id: Int): Flow<State<List<SeriesListDomain>>> = flow {
         emit(
             if (networkHandler.isInternetAvailable()) {
-                apiService.getSeriesById(id).run {
+                seriesRemoteDataSource.getSeriesById(id).run {
                     if (isSuccessful && body() != null) {
                         Success(body()!!.apiData.results.map { it.toSeriesListDomain() })
                     } else {

@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,6 +28,8 @@ class CharactersListViewModel @Inject constructor(val getAllCharacters: GetAllCh
 
     private var lastPageCount: Int = 0
 
+    var showSpinner: MutableLiveData<Boolean> = MutableLiveData()
+    var failure: MutableLiveData<Throwable> = MutableLiveData()
     var charactersList: MutableList<CharacterListView> = mutableListOf()
     var charactersResponse = MutableLiveData<List<CharacterListView>>()
     var moreCharactersResponse = MutableLiveData<List<CharacterListView>>()
@@ -36,13 +37,17 @@ class CharactersListViewModel @Inject constructor(val getAllCharacters: GetAllCh
     fun getAllCharacters() {
         viewModelScope.launch {
             getAllCharacters(GetAllCharacters.Params(lastPageCount))
-                .onStart {  }
-                .onEach {  }
-                .catch { failure ->  }.collect { result ->
+                .onStart { showSpinner.value = true }
+                .onEach { showSpinner.value = false }
+                .catch { error -> failure.value = error }
+                .collect { result ->
                     when (result) {
                         is Success<List<CharacterListDomain>> -> handleSuccessGetAllCharacters(
                             result.data
                         )
+                        is BadRequest -> failure.value = result.exception
+                        is Error -> failure.value = result.exception
+                        is ErrorNoConnection -> failure.value = result.exception
                     }
                 }
         }
@@ -52,12 +57,15 @@ class CharactersListViewModel @Inject constructor(val getAllCharacters: GetAllCh
         lastPageCount += MAX_OFFSET
         viewModelScope.launch {
             getAllCharacters(GetAllCharacters.Params(lastPageCount))
-                .catch { failure -> }
+                .catch { error -> failure.value = error }
                 .collect { result ->
                     when (result) {
                         is Success<List<CharacterListDomain>> -> handleSuccessGetMoreCharacters(
                             result.data
                         )
+                        is BadRequest -> failure.value = result.exception
+                        is Error -> failure.value = result.exception
+                        is ErrorNoConnection -> failure.value = result.exception
                     }
                 }
         }
@@ -71,16 +79,5 @@ class CharactersListViewModel @Inject constructor(val getAllCharacters: GetAllCh
     private fun handleSuccessGetMoreCharacters(data: List<CharacterListDomain>) {
         charactersList.addAll(data.map { it.toCharacterView() })
         moreCharactersResponse.postValue(charactersList)
-    }
-
-    fun filterCharactersList(text: String) {
-        val filteredList = charactersList.filter { character ->
-            containsText(character, text.toLowerCase(Locale.getDefault()))
-        }
-        charactersResponse.postValue(filteredList)
-    }
-
-    private fun containsText(character: CharacterListView, text: String): Boolean {
-        return character.name.toLowerCase(Locale.getDefault()).contains(text)
     }
 }

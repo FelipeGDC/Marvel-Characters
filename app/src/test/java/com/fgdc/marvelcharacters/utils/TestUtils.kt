@@ -1,6 +1,6 @@
 package com.fgdc.marvelcharacters.utils
 
-import com.fgdc.marvelcharacters.data.datasource.remote.responses.*
+import com.fgdc.data.datasource.remote.entity.*
 import com.fgdc.marvelcharacters.utils.extensions.empty
 
 fun <T> mockApiResponse(list: List<T>) = ApiResponse(

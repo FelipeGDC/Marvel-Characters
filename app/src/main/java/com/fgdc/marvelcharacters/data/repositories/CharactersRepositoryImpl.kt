@@ -1,6 +1,7 @@
 package com.fgdc.marvelcharacters.data.repositories
 
-import com.fgdc.marvelcharacters.data.datasource.remote.services.CharactersApi
+import com.fgdc.marvelcharacters.data.datasource.characters.CharactersRemoteDataSource
+import com.fgdc.marvelcharacters.domain.repository.CharactersRepository
 import com.fgdc.marvelcharacters.utils.exception.ErrorHandler
 import com.fgdc.marvelcharacters.utils.exception.ErrorHandler.NETWORK_ERROR_MESSAGE
 import com.fgdc.marvelcharacters.utils.functional.BadRequest
@@ -15,13 +16,13 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class CharactersRepositoryImpl @Inject constructor(
-    private val apiService: CharactersApi,
+    private val charactersRemoteDataSource: CharactersRemoteDataSource,
     private val networkHandler: NetworkHandler
 ) : CharactersRepository {
     override fun getAllCharacters(offset: Int) = flow {
         emit(
             if (networkHandler.isInternetAvailable()) {
-                apiService.getAllCharacters(offset).run {
+                charactersRemoteDataSource.getAllCharacters(offset).run {
                     if (isSuccessful && body() != null) {
                         Success(body()!!.apiData.results.map { it.toCharacterListDomain() })
                     } else {
@@ -40,7 +41,7 @@ class CharactersRepositoryImpl @Inject constructor(
     override fun getCharacterById(id: Int) = flow {
         emit(
             if (networkHandler.isInternetAvailable()) {
-                apiService.getCharacterById(id).run {
+                charactersRemoteDataSource.getCharacterById(id).run {
                     if (isSuccessful && body() != null) {
                         Success(body()!!.apiData.results.map { it.toCharacterDetailDomain() })
                     } else {
