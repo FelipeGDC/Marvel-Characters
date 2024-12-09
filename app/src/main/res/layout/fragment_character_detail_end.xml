@@ -45,10 +45,10 @@
         android:paddingStart="16dp"
         android:paddingTop="16dp"
         android:paddingEnd="16dp"
-        android:visibility="visible"
-        app:layout_constraintStart_toStartOf="parent"
         android:paddingBottom="16dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/separator"
+        app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/ic_back_button" />
 
 
@@ -61,10 +61,10 @@
         android:textStyle="bold"
         android:translationZ="9999dp"
         android:visibility="visible"
-        app:layout_constraintTop_toTopOf="@+id/backButtonSecondary"
         app:layout_constraintBottom_toBottomOf="@+id/backButtonSecondary"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/backButtonSecondary" />
 
 
     <androidx.appcompat.widget.AppCompatTextView

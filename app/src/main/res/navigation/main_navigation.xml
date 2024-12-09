@@ -23,10 +23,7 @@
         tools:layout="@layout/fragment_character_detail">
         <argument
             android:name="character_id"
-            android:defaultValue="0"
-            app:argType="integer"/>
-
-
+            app:argType="integer" />
     </fragment>
 
 </navigation>

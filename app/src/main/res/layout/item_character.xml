@@ -41,14 +41,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:textColor="@color/grey"
             android:layout_marginStart="5dp"
             android:gravity="start"
-            android:textStyle="italic"
+            android:textColor="@color/grey"
             android:textSize="12sp"
-            app:layout_constraintStart_toEndOf="@+id/characterImage"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textStyle="italic"
             app:layout_constraintBottom_toTopOf="@+id/characterName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/characterImage"
             tools:text="61651650000" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -60,9 +60,9 @@
             android:layout_marginStart="5dp"
             android:gravity="center"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/characterImage"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             tools:text="Character Name" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

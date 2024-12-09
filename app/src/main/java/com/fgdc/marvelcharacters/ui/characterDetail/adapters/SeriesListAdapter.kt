@@ -5,7 +5,6 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -34,7 +33,8 @@ class SeriesListAdapter :
         RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(series: SeriesListView) {
             itemBinding.apply {
-                item.animation = AnimationUtils.loadAnimation(itemView.context, R.anim.left_to_right)
+                item.animation =
+                    AnimationUtils.loadAnimation(itemView.context, R.anim.left_to_right)
                 seriesCover.simpleLoad(series.image, root.context)
                 seriesTitle.text = series.title
                 root.setOnClickListener {
@@ -45,7 +45,7 @@ class SeriesListAdapter :
                             Intent.CATEGORY_APP_BROWSER
                         )
                     defaultBrowser.data = Uri.parse(series.url)
-                    ContextCompat.startActivity(root.context, defaultBrowser, null)
+                    root.context.startActivity(defaultBrowser)
                 }
             }
         }

@@ -16,7 +16,7 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="Toolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="Toolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="TextViewStyleHeader" parent="Base.Widget.AppCompat.TextView">
         <item name="android:layout_height">wrap_content</item>
@@ -34,7 +34,6 @@
     <style name="RedSeparator" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:background">@android:color/transparent</item>
     </style>
-
 
 
     <style name="FieldTextViewStyle" parent="Base.Widget.AppCompat.TextView">

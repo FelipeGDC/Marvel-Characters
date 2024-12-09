@@ -15,7 +15,7 @@ import com.fgdc.marvelcharacters.ui.characterDetail.models.SeriesListView
 import com.fgdc.marvelcharacters.utils.functional.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -47,7 +47,11 @@ class CharacterDetailViewModel @Inject constructor(
                 .catch { error -> failure.value = error }
                 .collect { result ->
                     when (result) {
-                        is State.Success<List<CharacterDetailDomain>> -> handleSuccessGetCharacter(result.data)
+                        is State.Success<List<CharacterDetailDomain>> -> handleSuccessGetCharacter(
+                            result.data
+                        )
+
+                        else -> {}
                     }
                 }
         }
@@ -80,6 +84,8 @@ class CharacterDetailViewModel @Inject constructor(
                             comicLists.addAll(result.data.map { it.toComicListView() })
                             comicsListResponse.postValue(comicLists)
                         }
+
+                        else -> {}
                     }
                 }
         }
@@ -97,6 +103,8 @@ class CharacterDetailViewModel @Inject constructor(
                             seriesLists.addAll(result.data.map { it.toSeriesListView() })
                             seriesListResponse.postValue(seriesLists)
                         }
+
+                        else -> {}
                     }
                 }
         }

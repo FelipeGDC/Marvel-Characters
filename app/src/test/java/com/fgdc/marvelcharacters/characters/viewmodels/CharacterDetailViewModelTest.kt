@@ -20,9 +20,11 @@ import io.mockk.verifyOrder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
@@ -33,7 +35,7 @@ import org.junit.Test
 class CharacterDetailViewModelTest {
 
     private lateinit var viewModel: CharacterDetailViewModel
-    private val testDispatcher = TestCoroutineDispatcher()
+    private val testDispatcher = StandardTestDispatcher()
 
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
@@ -83,11 +85,10 @@ class CharacterDetailViewModelTest {
     @After
     fun tearDown() {
         Dispatchers.resetMain()
-        testDispatcher.cleanupTestCoroutines()
     }
 
     @Test
-    fun `should emit get character, get series and get comic by id on success`() = runBlockingTest {
+    fun `should emit get character, get series and get comic by id on success`() = runTest {
         viewModel.getCharacterById(characterId)
 
         val characters = expectedCharacters.map { it.toCharacterDetailView() }[0]

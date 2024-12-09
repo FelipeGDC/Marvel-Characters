@@ -14,9 +14,9 @@ import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
@@ -27,7 +27,7 @@ import org.junit.Test
 class CharactersListViewModelTest {
 
     private lateinit var viewModel: CharactersListViewModel
-    private val testDispatcher = TestCoroutineDispatcher()
+    private val testDispatcher = UnconfinedTestDispatcher()
 
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
@@ -56,11 +56,10 @@ class CharactersListViewModelTest {
     @After
     fun tearDown() {
         Dispatchers.resetMain()
-        testDispatcher.cleanupTestCoroutines()
     }
 
     @Test
-    fun `should emit get characters on success`() = runBlockingTest {
+    fun `should emit get characters on success`() = runTest {
         val expectedCharacters =
             mockCharacters(maxOffset).map { it.toCharacterListDomain() }
         val flowCharacter = flowOf(State.Success(expectedCharacters))
@@ -75,7 +74,7 @@ class CharactersListViewModelTest {
     }
 
     @Test
-    fun `should emit get more characters on success`() = runBlockingTest {
+    fun `should emit get more characters on success`() = runTest {
         val expectedCharacters =
             mockCharacters(maxOffset).map { it.toCharacterListDomain() }
         val flowCharacter = flowOf(State.Success(expectedCharacters))

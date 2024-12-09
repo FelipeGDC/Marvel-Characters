@@ -26,11 +26,6 @@ class CharactersListFragment : Fragment() {
     private lateinit var binding: FragmentCharactersListBinding
     private val adapter = CharactersListAdapter()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -85,11 +80,12 @@ class CharactersListFragment : Fragment() {
                     }
                 }
             }
+
             ErrorHandler.BAD_REQUEST -> {
                 binding.apply {
                     rvCharacters.visibility = View.GONE
                     emptyView.visibility = View.VISIBLE
-                    errorMessage.text = failure?.message ?: getString(R.string.common_error)
+                    errorMessage.text = failure.message ?: getString(R.string.common_error)
                     tryAgainBtn.setOnClickListener {
                         charactersListViewModel.getAllCharacters()
                     }
@@ -101,7 +97,7 @@ class CharactersListFragment : Fragment() {
     private fun showSpinner(show: Boolean?) {
         when (show) {
             true -> progressStatus(View.VISIBLE)
-            false -> progressStatus(View.GONE)
+            else -> progressStatus(View.GONE)
         }
     }
 

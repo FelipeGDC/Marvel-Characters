@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -35,7 +34,8 @@ class ComicsListAdapter :
         RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(comic: ComicListView) {
             itemBinding.apply {
-                item.animation = AnimationUtils.loadAnimation(itemView.context, R.anim.left_to_right)
+                item.animation =
+                    AnimationUtils.loadAnimation(itemView.context, R.anim.left_to_right)
                 comicCover.simpleLoad(comic.image, root.context)
                 comicTitle.text = comic.title
 
@@ -50,9 +50,12 @@ class ComicsListAdapter :
                 root.setOnClickListener {
                     root.findNavController()
                     val defaultBrowser =
-                        Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, Intent.CATEGORY_APP_BROWSER)
+                        Intent.makeMainSelectorActivity(
+                            Intent.ACTION_MAIN,
+                            Intent.CATEGORY_APP_BROWSER
+                        )
                     defaultBrowser.data = Uri.parse(comic.url)
-                    startActivity(root.context, defaultBrowser, null)
+                    root.context.startActivity(defaultBrowser)
                 }
             }
         }

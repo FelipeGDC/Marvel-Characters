@@ -2,8 +2,9 @@ package com.fgdc.marvelcharacters.ui
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedDispatcher
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import com.fgdc.marvelcharacters.R
 import com.fgdc.marvelcharacters.databinding.ActivityMainBinding
@@ -20,7 +21,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val navController = findNavController(R.id.fragment)
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragment) as NavHostFragment
+        val navController = navHostFragment.navController
         appBarConfiguration = AppBarConfiguration(navController.graph)
 
         setSupportActionBar(binding.toolbar)
@@ -38,7 +41,7 @@ class MainActivity : AppCompatActivity() {
                 else -> View.GONE
             }
         }
-        binding.toolbar.setNavigationOnClickListener { onBackPressed() }
+        binding.toolbar.setNavigationOnClickListener { OnBackPressedDispatcher() }
     }
 
     fun showProgressStatus(viewStatus: Int) {

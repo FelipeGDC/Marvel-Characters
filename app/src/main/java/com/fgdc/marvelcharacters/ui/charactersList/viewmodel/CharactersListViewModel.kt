@@ -9,7 +9,6 @@ import com.fgdc.marvelcharacters.ui.charactersList.models.CharacterListView
 import com.fgdc.marvelcharacters.utils.functional.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -42,6 +41,7 @@ class CharactersListViewModel @Inject constructor(val getAllCharacters: GetAllCh
                         is State.Success<List<CharacterListDomain>> -> handleSuccessGetAllCharacters(
                             result.data
                         )
+
                         is State.BadRequest -> failure.value = result.exception
                         is State.Error -> failure.value = result.exception
                         is State.ErrorNoConnection -> failure.value = result.exception
@@ -60,6 +60,7 @@ class CharactersListViewModel @Inject constructor(val getAllCharacters: GetAllCh
                         is State.Success<List<CharacterListDomain>> -> handleSuccessGetMoreCharacters(
                             result.data
                         )
+
                         is State.BadRequest -> failure.value = result.exception
                         is State.Error -> failure.value = result.exception
                         is State.ErrorNoConnection -> failure.value = result.exception

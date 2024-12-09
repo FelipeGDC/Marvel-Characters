@@ -11,14 +11,14 @@ import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
-import org.amshove.kluent.`should be instance of`
-import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
+import kotlin.test.assertTrue
 
 class GetAllCharactersTest {
 
@@ -39,22 +39,17 @@ class GetAllCharactersTest {
         val character = mockCharacters(20)
         val mockResponse =
             flowOf(State.Success(mockApiResponse(character).apiData.results.map { it.toCharacterListDomain() }))
-
         coEvery {
             repository.getAllCharacters(offset)
         } returns mockResponse
 
         val flow: Flow<State<List<CharacterListDomain>>> =
             getAllCharacters.run(GetAllCharacters.Params(offset))
-        Assert.assertTrue(repository.getAllCharacters(offset) == flow)
 
+        assertEquals(repository.getAllCharacters(offset), flow)
         flow.collect { result ->
-            result.`should be instance of`<State.Success<List<CharacterListDomain>>>()
-            when (result) {
-                is State.Success<List<CharacterListDomain>> -> {
-                    result.data shouldBeEqualTo character.map { it.toCharacterListDomain() }
-                }
-            }
+            assertIs<State.Success<List<CharacterListDomain>>>(result)
+            assertEquals(character.map { it.toCharacterListDomain() }, result.data)
         }
         verify(atLeast = 1) { repository.getAllCharacters(offset) }
     }

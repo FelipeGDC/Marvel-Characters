@@ -1,7 +1,7 @@
 package com.fgdc.marvelcharacters.data.datasource.series.api
 
-import com.fgdc.marvelcharacters.data.datasource.core.entity.ApiResponse
 import com.fgdc.marvelcharacters.data.datasource.core.SeriesMarvel
+import com.fgdc.marvelcharacters.data.datasource.core.entity.ApiResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

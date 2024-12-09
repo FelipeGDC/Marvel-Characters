@@ -11,12 +11,11 @@ import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.runBlocking
-import org.amshove.kluent.`should be instance of`
-import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Before
 import org.junit.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
 
 class CharactersRepositoryTest {
 
@@ -34,53 +33,40 @@ class CharactersRepositoryTest {
 
     @Test
     fun `should get all characters from service on success`(): Unit = runBlocking {
-
         val character = mockCharacters(20)
         val mockResponse =
             State.Success(mockApiResponse(character).apiData.results.map { it.toCharacterListDomain() })
         val offset = 0
-
         coEvery {
             charactersRemoteDataSource.getAllCharacters(offset)
         } returns mockResponse
 
-        charactersRemoteDataSource.getAllCharacters(offset) shouldBeEqualTo mockResponse
+        val flow: Flow<State<List<CharacterListDomain>>> = repository.getAllCharacters(offset)
 
-        val flow: Flow<State<List<CharacterListDomain>>> =
-            repository.getAllCharacters(offset)
+        assertEquals(mockResponse, charactersRemoteDataSource.getAllCharacters(offset))
         flow.collect { result ->
-            result.`should be instance of`<State.Success<List<CharacterListDomain>>>()
-            when (result) {
-                is State.Success<List<CharacterListDomain>> -> {
-                    result.data shouldBeEqualTo character.map { it.toCharacterListDomain() }
-                }
-            }
+            assertIs<State.Success<List<CharacterListDomain>>>(result)
+            assertEquals(character.map { it.toCharacterListDomain() }, result.data)
         }
     }
 
     @Test
     fun `should get specific character from service on success`(): Unit = runBlocking {
-
         val character = mockCharacters(1)
         val mockResponse =
             State.Success(mockApiResponse(character).apiData.results.map { it.toCharacterDetailDomain() })
         val characterId = 0
-
         coEvery {
             charactersRemoteDataSource.getCharacterById(characterId)
         } returns mockResponse
 
-        charactersRemoteDataSource.getCharacterById(characterId) shouldBeEqualTo mockResponse
-
         val flow: Flow<State<List<CharacterDetailDomain>>> =
             repository.getCharacterById(characterId)
+
+        assertEquals(mockResponse, charactersRemoteDataSource.getCharacterById(characterId))
         flow.collect { result ->
-            result.`should be instance of`<State.Success<List<CharacterDetailDomain>>>()
-            when (result) {
-                is State.Success<List<CharacterDetailDomain>> -> {
-                    result.data shouldBeEqualTo character.map { it.toCharacterDetailDomain() }
-                }
-            }
+            assertIs<State.Success<List<CharacterDetailDomain>>>(result)
+            assertEquals(character.map { it.toCharacterDetailDomain() }, result.data)
         }
     }
 }

@@ -125,6 +125,7 @@ class CharacterDetailFragment : Fragment() {
                     }
                 }.show()
             }
+
             ErrorHandler.BAD_REQUEST -> {
                 showInfoAlertDialog {
                     setTitle(getString(R.string.bad_request))
@@ -140,7 +141,7 @@ class CharacterDetailFragment : Fragment() {
     private fun showSpinner(show: Boolean?) {
         when (show) {
             true -> progressStatus(View.VISIBLE)
-            false -> progressStatus(View.GONE)
+            else -> progressStatus(View.GONE)
         }
     }
 

@@ -1,6 +1,23 @@
 package com.fgdc.marvelcharacters.utils
 
-import com.fgdc.marvelcharacters.data.datasource.core.*
+import com.fgdc.marvelcharacters.data.datasource.core.CharacterMarvel
+import com.fgdc.marvelcharacters.data.datasource.core.ComicMarvel
+import com.fgdc.marvelcharacters.data.datasource.core.Comics
+import com.fgdc.marvelcharacters.data.datasource.core.ComicsItem
+import com.fgdc.marvelcharacters.data.datasource.core.Events
+import com.fgdc.marvelcharacters.data.datasource.core.EventsItem
+import com.fgdc.marvelcharacters.data.datasource.core.Price
+import com.fgdc.marvelcharacters.data.datasource.core.Series
+import com.fgdc.marvelcharacters.data.datasource.core.SeriesItem
+import com.fgdc.marvelcharacters.data.datasource.core.SeriesMarvel
+import com.fgdc.marvelcharacters.data.datasource.core.Stories
+import com.fgdc.marvelcharacters.data.datasource.core.StoriesItem
+import com.fgdc.marvelcharacters.data.datasource.core.Thumbnail
+import com.fgdc.marvelcharacters.data.datasource.core.ThumbnailComic
+import com.fgdc.marvelcharacters.data.datasource.core.ThumbnailSeries
+import com.fgdc.marvelcharacters.data.datasource.core.Url
+import com.fgdc.marvelcharacters.data.datasource.core.UrlComic
+import com.fgdc.marvelcharacters.data.datasource.core.UrlSeries
 import com.fgdc.marvelcharacters.data.datasource.core.entity.ApiResponse
 import com.fgdc.marvelcharacters.data.datasource.core.entity.ApiResponseData
 import com.fgdc.marvelcharacters.utils.extensions.empty
